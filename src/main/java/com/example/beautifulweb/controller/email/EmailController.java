@@ -18,5 +18,7 @@ public class EmailController {
         emailService.sendEmail(to, subject, body);
         return "Email sent successfully!";
 
+        // Gửi email HTML
+
     }
 }

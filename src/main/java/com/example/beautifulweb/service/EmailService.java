@@ -15,6 +15,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    // Gửi email HTML
     public void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
