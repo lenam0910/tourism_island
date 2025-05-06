@@ -1,93 +1,73 @@
-// package com.example.beautifulweb.config;
+package com.example.beautifulweb.config;
 
-// import java.io.IOException;
-// import java.util.Collection;
-// import java.util.HashMap;
-// import java.util.Map;
+import com.example.beautifulweb.model.User;
+import com.example.beautifulweb.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
-// import org.springframework.context.annotation.Configuration;
-// import org.springframework.security.core.Authentication;
-// import org.springframework.security.core.GrantedAuthority;
-// import org.springframework.security.web.DefaultRedirectStrategy;
-// import org.springframework.security.web.RedirectStrategy;
-// import org.springframework.security.web.WebAttributes;
-// import
-// org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
 
-// import com.example.beautifulweb.domain.User;
-// import com.example.beautifulweb.service.UserService;
+@Component
+public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
-// import jakarta.servlet.ServletException;
-// import jakarta.servlet.http.HttpServletRequest;
-// import jakarta.servlet.http.HttpServletResponse;
-// import jakarta.servlet.http.HttpSession;
+    private static final Logger logger = LoggerFactory.getLogger(CustomSuccessHandler.class);
 
-// @Configuration
-// public class CustomSuccessHandler implements AuthenticationSuccessHandler {
+    @Autowired
+    private UserService userService;
 
-// private final UserService userService;
-// private static final Logger logger =
-// LoggerFactory.getLogger(CustomSuccessHandler.class);
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-// public CustomSuccessHandler(UserService userService) {
-// this.userService = userService;
-// }
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication) throws IOException, ServletException {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            logger.warn("Session is null, cannot store user information.");
+            redirectStrategy.sendRedirect(request, response, "/");
+            return;
+        }
 
-// protected String determineTargetUrl(final Authentication authentication) {
-// Map<String, String> roleTargetUrlMap = new HashMap<>();
-// roleTargetUrlMap.put("ROLE_Seeker", "/");
-// roleTargetUrlMap.put("ROLE_Admin", "/admin/dashboard");
-// roleTargetUrlMap.put("ROLE_Recruiter", "/recruiter/dashboard");
+        // Get username from Spring Security Authentication
+        String username = authentication.getName();
+        logger.info("User '{}' logged in with authorities: {}", username, authentication.getAuthorities());
 
-// final Collection<? extends GrantedAuthority> authorities =
-// authentication.getAuthorities();
-// for (final GrantedAuthority grantedAuthority : authorities) {
-// String authorityName = grantedAuthority.getAuthority();
-// if (roleTargetUrlMap.containsKey(authorityName)) {
-// return roleTargetUrlMap.get(authorityName);
-// }
-// }
-// throw new IllegalStateException();
-// }
+        // Get user from database
+        User user = userService.findByUsername(username);
+        if (user != null) {
+            // Store user information in session
+            session.setAttribute("userId", user.getId());
+            session.setAttribute("username", user.getUsername());
+            session.setAttribute("role", user.getRole());
+            logger.info("Stored in session - userId: {}, username: {}, role: {}", user.getId(), user.getUsername(),
+                    user.getRole());
+        } else {
+            logger.warn("User '{}' not found in database.", username);
+        }
 
-// protected void clearAuthenticationAttributes(HttpSession session) {
-// if (session == null) {
-// return;
-// }
-// session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-// }
+        // Clear authentication attributes
+        clearAuthenticationAttributes(session);
 
-// @Override
-// public void onAuthenticationSuccess(HttpServletRequest request,
-// HttpServletResponse response,
-// Authentication authentication) throws IOException, ServletException {
-// RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-// HttpSession session = request.getSession(false);
-// String targetUrl = determineTargetUrl(authentication);
-// if (response.isCommitted()) {
-// return;
-// }
-// // Get username from Spring Security Context Holder
-// String username = authentication.getName();
-// logger.info("User '{}' logged in with authorities: {}", username,
-// authentication.getAuthorities());
-// // Get user from database
-// User user = userService.getUserByUsername(username);
-// session.setAttribute("userId", user.getId());
-// session.setAttribute("username", user.getUsername());
-// session.setAttribute("fullName", user.getFullName());
-// session.setAttribute("avatar",
-// (user.getAvatar() == null || user.getAvatar().isEmpty()) ? null :
-// user.getAvatar());
-// session.setAttribute("provider", user.getProvider());
-// // For HR only
-// if (user.getWorkingCompany() != null) {
-// session.setAttribute("companyId", user.getWorkingCompany().getId());
-// }
-// redirectStrategy.sendRedirect(request, response, targetUrl);
-// clearAuthenticationAttributes(session);
-// }
+        // Redirect based on role
+        String targetUrl = (user != null && "ROLE_ADMIN".equals(user.getRole())) ? "/admin/dashboard" : "/";
+        if (!response.isCommitted()) {
+            redirectStrategy.sendRedirect(request, response, targetUrl);
+        }
+    }
 
-// }
+    protected void clearAuthenticationAttributes(HttpSession session) {
+        if (session != null) {
+            session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        }
+    }
+}

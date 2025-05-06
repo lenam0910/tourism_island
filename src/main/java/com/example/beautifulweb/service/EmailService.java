@@ -22,7 +22,7 @@ public class EmailService {
 
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setFrom("your-email@gmail.com");
+        helper.setFrom("tourismislands1@gmail.com");
         helper.setText(htmlBody, true); // true để bật HTML
 
         mailSender.send(message);
@@ -33,7 +33,7 @@ public class EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("your-email@gmail.com"); // Email người gửi (phải khớp với spring.mail.username)
+        message.setFrom("tourismislands1@gmail.com"); // Email người gửi (phải khớp với spring.mail.username)
 
         mailSender.send(message);
     }

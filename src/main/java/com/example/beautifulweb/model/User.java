@@ -27,16 +27,10 @@ public class User {
     private LocalDateTime resetTokenExpiry;
 
     @Column(nullable = false)
-    private String role = "USER";
+    private String role;
 
-    // Constructors
     public User() {
-    }
-
-    public User(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
+        this.role = "USER"; // Vai trò mặc định
     }
 
     // Getters and Setters

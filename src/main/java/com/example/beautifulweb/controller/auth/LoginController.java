@@ -1,10 +1,20 @@
 package com.example.beautifulweb.controller.auth;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.example.beautifulweb.model.User;
+import com.example.beautifulweb.service.UserService;
 
 @Controller
 public class LoginController {
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/login")
     public String login() {
@@ -19,5 +29,20 @@ public class LoginController {
     @GetMapping("/access-denied")
     public String accessDenied() {
         return "access-denied"; // Trả về file access-denied.html
+    }
+
+    @PostMapping("/login")
+    public String signupUser(@ModelAttribute("user") User user, Model model) {
+        User existingUser = userService.findByUsername(user.getUsername());
+        if (existingUser == null) {
+            model.addAttribute("error", "Username or Password is not correct!");
+            return "login";
+        }
+
+        if (!userService.checkPassword(user.getPassword(), existingUser.getPassword())) {
+            model.addAttribute("error", "Username or Password is not correct!");
+            return "login";
+        }
+        return "redirect:/login?success";
     }
 }

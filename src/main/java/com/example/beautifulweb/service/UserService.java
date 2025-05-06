@@ -52,7 +52,7 @@ public class UserService implements UserDetailsService {
     public String generateResetToken(User user) {
         String token = UUID.randomUUID().toString();
         user.setResetToken(token);
-        user.setResetTokenExpiry(LocalDateTime.now().plusHours(1)); // Token hết hạn sau 1 giờ
+        user.setResetTokenExpiry(LocalDateTime.now().plusHours(1));
         userRepository.save(user);
         return token;
     }
@@ -62,5 +62,9 @@ public class UserService implements UserDetailsService {
         user.setResetToken(null);
         user.setResetTokenExpiry(null);
         userRepository.save(user);
+    }
+
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }
