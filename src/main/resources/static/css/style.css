@@ -6,10 +6,17 @@
     --dark: #14141F;
 }
 
+.rounded-circle {
+    background-color: #17a3b8 !important;
+}
+
 .fa {
     color: #17a3b8 !important;
 }
-
+.fa-globe, .fa-dollar-sign, .fa-plane, .fa-user, .fa-users, .fa-calendar-alt, .fa-clock, .fa-map-marker-alt, .fa-star
+, .fa-facebook-f, .fa-twitter, .fa-instagram, .fa-linkedin-in, .fa-pinterest-p, .fa-youtube, .fa-whatsapp{
+    color:#FFFFFF !important;
+}
 .breadcrumb a {
     color: #17a3b8 !important;
     text-decoration: none;
@@ -22,6 +29,7 @@
 button,
 .btn {
     background-color: #17a3b8 !important;
+    border-color: #17a3b8 !important;
 }
 
 .fw-medium {

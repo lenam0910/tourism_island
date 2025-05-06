@@ -22,8 +22,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/login", "/signup", "/forgot-password", "/reset-password", "/css/**",
-								"/js/**")
+						.requestMatchers("/","/login", "/signup", "/forgot-password", "/reset-password", "/css/**",
+								"/js/**","/img/**", "/lib/**", "/home")
 						.permitAll()
 						.requestMatchers("/admin/**").hasRole("ADMIN") // Chỉ admin truy cập được /admin/**
 						.anyRequest().authenticated())
