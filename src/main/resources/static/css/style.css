@@ -1,9 +1,27 @@
 /********** Template CSS **********/
 :root {
-    --primary: #86B817;
+    --primary: #17a3b8;
     --secondary: #FE8800;
     --light: #F5F5F5;
     --dark: #14141F;
+}
+
+.fa {
+    color: #17a3b8 !important;
+}
+
+.breadcrumb a {
+    color: #17a3b8 !important;
+    text-decoration: none;
+}
+
+.text-primary {
+    color: #17a3b8 !important;
+}
+
+button,
+.btn {
+    background-color: #17a3b8 !important;
 }
 
 .fw-medium {
@@ -141,7 +159,7 @@
         border-bottom: 1px solid rgba(256, 256, 256, .1);
         z-index: 999;
     }
-    
+
     .sticky-top.navbar-light {
         position: fixed;
         background: #FFFFFF;
@@ -178,7 +196,7 @@
     background-size: cover;
 }
 
-.breadcrumb-item + .breadcrumb-item::before {
+.breadcrumb-item+.breadcrumb-item::before {
     color: rgba(255, 255, 255, .5);
 }
 
@@ -325,6 +343,7 @@
 }
 
 @media (min-width: 768px) {
+
     .testimonial-carousel::before,
     .testimonial-carousel::after {
         width: 200px;
@@ -332,6 +351,7 @@
 }
 
 @media (min-width: 992px) {
+
     .testimonial-carousel::before,
     .testimonial-carousel::after {
         width: 300px;
