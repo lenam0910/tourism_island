@@ -22,13 +22,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeHttpRequests(auth -> auth
-<<<<<<< Updated upstream
-						.requestMatchers("/login", "/signup", "/forgot-password", "/reset-password", "/css/**",
-								"/js/**")
-=======
 						.requestMatchers("/","/login", "/signup", "/forgot-password", "/reset-password", "/css/**",
 								"/js/**","/img/**","/api/**", "/lib/**", "/home", "/map")
->>>>>>> Stashed changes
 						.permitAll()
 						.requestMatchers("/admin/**").hasRole("ADMIN")
 						.anyRequest().authenticated())
