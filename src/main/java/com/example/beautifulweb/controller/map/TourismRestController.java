@@ -3,6 +3,7 @@ package com.example.beautifulweb.controller.map;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.beautifulweb.model.Tourism;
@@ -24,7 +26,8 @@ public class TourismRestController {
     private final TourismRepository tourismRepository;
     private final ToursimImageService tourismImageService;
 
-    public TourismRestController(TourismService tourismService, TourismRepository tourismRepository, ToursimImageService tourismImageService) {
+    public TourismRestController(TourismService tourismService, TourismRepository tourismRepository,
+            ToursimImageService tourismImageService) {
         this.tourismImageService = tourismImageService;
         this.tourismRepository = tourismRepository;
         this.tourismService = tourismService;
@@ -46,7 +49,6 @@ public class TourismRestController {
         }
     }
 
-    // Xóa
     @DeleteMapping("/api/tourism/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!tourismRepository.existsById(id)) {
@@ -71,7 +73,6 @@ public class TourismRestController {
         }
     }
 
-    // Cập nhật
     @PostMapping("/api/tourism/update/{id}")
     public ResponseEntity<Tourism> update(@PathVariable Long id, @ModelAttribute Tourism updated) {
         return tourismRepository.findById(id)
@@ -86,9 +87,35 @@ public class TourismRestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Thêm mới
     @PostMapping("/api/tourism/add")
     public Tourism addNew(@ModelAttribute Tourism tourism) {
         return tourismRepository.save(tourism);
+    }
+
+    // Endpoint /api/tourism/nearby
+    @GetMapping("/api/tourism/nearby")
+    public List<Tourism> getNearbyServices(
+            @RequestParam("lat") double lat,
+            @RequestParam("lng") double lng,
+            @RequestParam("radius") double radius) {
+        List<Tourism> allTourisms = tourismService.getAll();
+        return allTourisms.stream()
+                .filter(tourism -> {
+                    double distance = calculateDistance(lat, lng, tourism.getLatitude(), tourism.getLongitude());
+                    return distance <= radius / 1000; // Chuyển mét thành km
+                })
+                .collect(Collectors.toList());
+    }
+
+    // Hàm tính khoảng cách Haversine (km)
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // Bán kính Trái Đất (km)
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                        * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
     }
 }
