@@ -37,6 +37,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"
         integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script async defer
+        src="https://maps.gomaps.pro/maps/api/js?key=AlzaSymd04nEXFHqc1-lWvkUWcMihigYWV4vgYi&libraries=places&callback=initMap"></script>
+
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+        }
+
+        .offcanvas {
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .offcanvas {
+                max-width: 100%;
+                height: 50%;
+            }
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -152,6 +182,31 @@
     </div>
     <!-- About End -->
 
+    <!-- Map Start -->
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="text-center">
+                <h6 class="section-title bg-white text-center text-primary px-3">Explore</h6>
+                <h1 class="mb-5">Our Destinations Map</h1>
+            </div>
+            <div id="map"></div>
+
+            <!-- Offcanvas Sidebar -->
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="sidebar-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p id="sidebar-description"></p>
+                    <div id="sidebar-images"></div>
+                    <a id="sidebar-map-link" href="#" target="_blank" class="btn btn-outline-primary mt-3">View on
+                        Google Maps</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Map End -->
 
     <!-- Service Start -->
     <div class="container-xxl py-5">
@@ -478,7 +533,7 @@
     <!-- Booking Start -->
 
 
-    <!-- Process Start -->
+    <!-- Process Start 
     <div class="container-xxl py-5">
         <div class="container">
             <div class="text-center pb-4 wow fadeInUp" data-wow-delay="0.1s">
@@ -527,11 +582,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
     <!-- Process Start -->
 
 
-    <!-- Team Start -->
+    <!-- Team Start 
     <div class="container-xxl py-5">
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
@@ -605,11 +660,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
     <!-- Team End -->
 
 
-    <!-- Testimonial Start -->
+    <!-- Testimonial Start 
     <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container">
             <div class="text-center">
@@ -651,7 +706,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
     <!-- Testimonial End -->
 
 
@@ -758,7 +813,106 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
     <script th:src="@{/manager/js/main.js}"></script>
+    <script>
+        let map;
+        let allMarkers = [];
+        let sidebar = new bootstrap.Offcanvas(document.getElementById('sidebar'));
 
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 8.6955, lng: 106.6018 }, // Côn Đảo
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.SATELLITE, // Chế độ Satellite
+                styles: [
+                    {
+                        featureType: "poi", // Ẩn Points of Interest
+                        stylers: [{ visibility: "off" }]
+                    },
+                    {
+                        featureType: "transit", // Ẩn các điểm giao thông công cộng
+                        stylers: [{ visibility: "off" }]
+                    }
+                ]
+            });
+
+            loadMarkers();
+        }
+
+        function loadMarkers() {
+            allMarkers.forEach(m => m.setMap(null));
+            allMarkers = [];
+
+            fetch("/api/tourism/all")
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(service => {
+                        const position = { lat: service.latitude, lng: service.longitude };
+                        const m = new google.maps.Marker({
+                            position: position,
+                            map: map,
+                            title: service.name,
+                            label: {
+                                text: service.name,
+                                color: "#FFFFFF",
+                                fontSize: "14px",
+                                fontWeight: "bold"
+                            }
+                        });
+
+                        m.addListener("click", () => {
+                            document.getElementById("sidebar-title").innerText = service.name;
+                            document.getElementById("sidebar-description").innerText = service.description;
+                            const mapLink = document.getElementById("sidebar-map-link");
+                            mapLink.href = `https://www.google.com/maps?q=${service.latitude},${service.longitude}`;
+
+                            const imageContainer = document.getElementById("sidebar-images");
+                            imageContainer.innerHTML = 'Loading images...';
+                            fetch(`/api/tourism/images/${service.id}`)
+                                .then(res => {
+                                    if (!res.ok) {
+                                        throw new Error('Failed to load images: ' + res.status);
+                                    }
+                                    return res.json();
+                                })
+                                .then(images => {
+                                    imageContainer.innerHTML = '';
+                                    if (images && images.length > 0) {
+                                        images.forEach(img => {
+                                            const imgElement = document.createElement('img');
+                                            imgElement.src = img.imagePath;
+                                            imgElement.className = 'preview-image';
+                                            imgElement.alt = 'Destination image';
+                                            imageContainer.appendChild(imgElement);
+                                        });
+                                    } else {
+                                        imageContainer.innerText = 'No images available';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error loading images:', error);
+                                    imageContainer.innerText = 'Error loading images';
+                                    toastr.error('Failed to load images');
+                                });
+
+                            sidebar.show();
+                            resizeMap();
+                        });
+
+                        allMarkers.push(m);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading markers:', error);
+                    toastr.error('Failed to load destinations');
+                });
+        }
+
+        function resizeMap() {
+            google.maps.event.trigger(map, "resize");
+        }
+
+        window.addEventListener('load', initMap);
+    </script>
 </body>
 
 </html>
