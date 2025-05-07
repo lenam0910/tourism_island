@@ -25,11 +25,7 @@ public class SecurityConfig {
 
 						.requestMatchers("/login", "/resend-code", "/signup", "/forgot-password", "/reset-password",
 								"/css/**",
-<<<<<<< HEAD
-								"/js/**", "/img/**", "/api/**", "/lib/**", "/home", "/map", "/")
-=======
-								"/js/**", "/img/**", "/api/**", "/lib/**","/manager/**", "/user/**", "/home", "/map")
->>>>>>> 9ec328a1785ad3d791d532de83e14fbd6cb3ab11
+								"/js/**", "/img/**", "/api/**", "/lib/**", "/manager/**", "/user/**", "/home", "/map")
 						.permitAll()
 						.requestMatchers("/admin/**").hasRole("ADMIN")
 						.anyRequest().authenticated())
