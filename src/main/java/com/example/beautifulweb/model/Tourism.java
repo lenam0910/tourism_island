@@ -26,11 +26,16 @@ public class Tourism {
     private String description;
     private double latitude;
     private double longitude;
+    private double price;
 
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "tourism")
     @JsonIgnore
     private Set<TourismImage> images = new HashSet<>(); // Danh sách ảnh liên quan đến đối tượng Tourism này
     
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "tourism")
+    @JsonIgnore
+    private Set<Package> packages = new HashSet<>(); // Danh sách gói liên quan đến đối tượng Tourism này
     
 }

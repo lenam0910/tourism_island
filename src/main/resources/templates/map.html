@@ -108,7 +108,20 @@
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
                 center: { lat: 8.6955, lng: 106.6018 }, // Côn Đảo
-                zoom: 13
+                zoom: 13,
+                disableDefaultUI: false, // Ẩn toàn bộ giao diện người dùng mặc định
+                // Hoặc tùy chỉnh từng điều khiển riêng lẻ (bỏ comment nếu muốn):
+                // zoomControl: false, // Ẩn nút zoom
+                // mapTypeControl: false, // Ẩn nút chuyển đổi loại bản đồ
+                // streetViewControl: false, // Ẩn nút Street View
+                // fullscreenControl: false, // Ẩn nút toàn màn hình
+                styles: [
+                    {
+                        featureType: "poi", // Ẩn tất cả điểm quan tâm (POI)
+                        elementType: "all",
+                        stylers: [{ visibility: "off" }]
+                    }
+                ]
             });
 
             loadMarkers();
@@ -134,8 +147,7 @@
                     imageInput.value = '';
                     return;
                 }
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
+                for (const file of files) {
                     if (file.type.match('image.*')) {
                         const reader = new FileReader();
                         reader.onload = (e) => {
