@@ -76,10 +76,17 @@
                 .then(res => res.json())
                 .then(data => {
                     data.forEach(service => {
+                        const position = { lat: service.latitude, lng: service.longitude };
                         const m = new google.maps.Marker({
-                            position: { lat: service.latitude, lng: service.longitude },
+                            position: position,
                             map: map,
-                            title: service.name
+                            title: service.name,
+                            label: {
+                                text: service.name,
+                                color: "#FFFFFF",
+                                fontSize: "14px",
+                                fontWeight: "bold"
+                            }
                         });
 
                         const info = new google.maps.InfoWindow({
@@ -95,6 +102,7 @@
         window.onload = initMap;
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/labelMarker.js"></script>
 </body>
 
 </html>

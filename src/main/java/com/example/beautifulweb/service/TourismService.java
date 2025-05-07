@@ -36,6 +36,6 @@ public class TourismService {
     }
     public void save(Tourism tourism) {
         repository.save(tourism);
-    }
+    } 
 
 }
