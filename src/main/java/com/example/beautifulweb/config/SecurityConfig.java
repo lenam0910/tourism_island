@@ -22,9 +22,15 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeHttpRequests(auth -> auth
+<<<<<<< HEAD
 						.requestMatchers("/login", "/resend-code", "/signup", "/forgot-password", "/reset-password",
 								"/css/**", "/js/**", "/manager/**")
 						.permitAll() // Cho phép truy cập tài nguyên tĩnh trong /manager/**
+=======
+						.requestMatchers("/","/login", "/signup", "/forgot-password", "/reset-password", "/css/**",
+								"/js/**","/img/**","/api/**", "/lib/**", "/home", "/map")
+						.permitAll()
+>>>>>>> c75e7a06e7dd44e887389b6907d506e5116479f8
 						.requestMatchers("/admin/**").hasRole("ADMIN")
 						.anyRequest().authenticated())
 				.formLogin(form -> form
