@@ -28,4 +28,9 @@ public class navigationController {
     public String packages() {
         return "package"; // Returns the packages.html template
     }
+
+    @GetMapping("/map")
+    public String map() {
+        return "map"; // Returns the map.html template
+    }
 }
