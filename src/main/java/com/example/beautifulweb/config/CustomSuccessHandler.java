@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -53,6 +54,21 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                     user.getRole());
         } else {
             logger.warn("User '{}' not found in database.", username);
+        }
+
+        // Check if "Remember Me" was selected and store/remove preference in a cookie
+        String rememberMe = request.getParameter("remember-me");
+        if ("on".equals(rememberMe)) {
+            Cookie rememberMeCookie = new Cookie("rememberMePreference", "true");
+            rememberMeCookie.setMaxAge(30 * 24 * 60 * 60); // Cookie sống 30 ngày
+            rememberMeCookie.setPath("/");
+            response.addCookie(rememberMeCookie);
+        } else {
+            // If "Remember Me" is not selected, remove the preference cookie
+            Cookie rememberMeCookie = new Cookie("rememberMePreference", null);
+            rememberMeCookie.setMaxAge(0); // Xóa cookie
+            rememberMeCookie.setPath("/");
+            response.addCookie(rememberMeCookie);
         }
 
         // Clear authentication attributes

@@ -136,6 +136,11 @@
             font-size: 1.1rem;
         }
 
+        .form-check-label {
+            font-size: 1.1rem;
+            color: #1a2a44;
+        }
+
         .animate__fadeInUp {
             animation: fadeInUp 2s ease-out;
         }
@@ -188,6 +193,11 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password"
                     placeholder="Enter your password" required>
+            </div>
+            <div class="mb-4 form-check">
+                <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me"
+                    th:checked="${rememberMe}">
+                <label class="form-check-label" for="remember-me">Remember Me</label>
             </div>
             <button type="submit" class="btn-login">Login</button>
             <a href="/forgot-password" class="forgot-password">Forgot Password?</a>

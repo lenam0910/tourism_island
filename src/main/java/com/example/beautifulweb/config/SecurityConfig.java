@@ -22,10 +22,10 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/","/login", "/signup", "/forgot-password", "/reset-password", "/css/**",
-								"/js/**","/img/**", "/lib/**", "/home")
+						.requestMatchers("/login", "/signup", "/forgot-password", "/reset-password", "/css/**",
+								"/js/**")
 						.permitAll()
-						.requestMatchers("/admin/**").hasRole("ADMIN") // Chỉ admin truy cập được /admin/**
+						.requestMatchers("/admin/**").hasRole("ADMIN")
 						.anyRequest().authenticated())
 				.formLogin(form -> form
 						.loginPage("/login")
@@ -37,8 +37,12 @@ public class SecurityConfig {
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/login?logout")
 						.invalidateHttpSession(true)
-						.deleteCookies("JSESSIONID")
+						.deleteCookies("JSESSIONID", "remember-me") // Xóa cookie remember-me khi đăng xuất
 						.permitAll())
+				.rememberMe(rememberMe -> rememberMe // Kích hoạt Remember Me
+						.key("uniqueAndSecretKey") // Khóa để mã hóa token
+						.tokenValiditySeconds(86400) // Thời gian sống của cookie: 1 ngày (86400 giây)
+						.userDetailsService(userService))
 				.userDetailsService(userService);
 
 		return http.build();
