@@ -12,6 +12,8 @@ import com.example.beautifulweb.model.TourismImage;
 import com.example.beautifulweb.repository.TourismRepository;
 import com.example.beautifulweb.service.FileService;
 import com.example.beautifulweb.service.ToursimImageService;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 @Controller
 public class TourismController {
@@ -59,7 +61,7 @@ public class TourismController {
             tourismRepository.save(tourism);
         }
 
-        return "redirect:/map";
+        return "redirect:/admin/map";
     }
 
 }

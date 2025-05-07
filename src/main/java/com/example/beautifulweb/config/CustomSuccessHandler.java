@@ -77,7 +77,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         // Redirect based on role
         String targetUrl;
         if (user != null && "ADMIN".equals(user.getRole())) {
-            targetUrl = "/admin/dashboard?login-success"; // Chuyển hướng đến /dashboard cho admin
+            targetUrl = "/admin/map?login-success"; // Chuyển hướng đến /dashboard cho admin
         } else {
             targetUrl = "/?login-success"; // User thường về trang chủ
         }

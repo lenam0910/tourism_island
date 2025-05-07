@@ -23,6 +23,12 @@ public class AdminController {
         return "admin/dashboard";
     }
 
+    @GetMapping("/map")
+    public String showMap(Model model) {
+        // model.addAttribute("services", serviceService.getAllServices());
+        return "admin/map";
+    }
+
     // @GetMapping("/add-service")
     // public String showAddServiceForm(Model model) {
     // model.addAttribute("service", new Service());
