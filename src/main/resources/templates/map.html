@@ -7,34 +7,93 @@
         src="https://maps.gomaps.pro/maps/api/js?key=AlzaSymd04nEXFHqc1-lWvkUWcMihigYWV4vgYi&libraries=places&callback=initMap"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        #map {
+            width: 100%;
+            height: 1000px;
+        }
+
+        .offcanvas {
+            max-width: 400px;
+            /* Giới hạn chiều rộng sidebar trên desktop */
+        }
+
+        @media (max-width: 768px) {
+            .offcanvas {
+                max-width: 100%;
+                /* Chiếm toàn bộ chiều rộng trên mobile */
+                height: 50%;
+                /* Chiếm 50% chiều cao trên mobile */
+            }
+        }
+
+        #imagePreview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="map" style="height:1000px"></div>
+    <div class="container-fluid">
+        <div id="map" style="height: 1000px; width: 100%;"></div>
+
+        <!-- Offcanvas Sidebar -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="sidebar-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p id="sidebar-description"></p>
+                <div id="sidebar-images"></div>
+                <a id="sidebar-map-link" href="#" target="_blank" class="btn btn-outline-primary mt-3">Xem trên Google
+                    Maps</a>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal nhập dịch vụ -->
     <div class="modal fade" id="serviceModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <form id="serviceForm" class="modal-content" method="post" th:action="@{/add}">
+            <form id="serviceForm" class="modal-content" method="post" th:action="@{/add}"
+                enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title">Thêm dịch vụ</h5>
+                    <h5 class="modal-title">New Location</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="latitude" id="lat">
                     <input type="hidden" name="longitude" id="lng">
                     <div class="mb-3">
-                        <label>Tên dịch vụ</label>
+                        <label>Name</label>
                         <input type="text" id="name" name="name" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label>Mô tả</label>
+                        <label>Description</label>
                         <textarea id="description" name="description" class="form-control" required></textarea>
                     </div>
+                    <!-- Upload nhiều hình ảnh -->
+                    <div class="mb-3">
+                        <label for="imageLocation" class="form-label">Image of location:</label>
+                        <input class="form-control" type="file" id="imageLocation" accept=".png, .jpg, .jpeg"
+                            name="imageLocation" multiple />
+                        <div id="imagePreview" class="mt-2"></div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Lưu</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>
@@ -44,6 +103,7 @@
         let map;
         let allMarkers = [];
         let latClicked = 0, lngClicked = 0;
+        let sidebar = new bootstrap.Offcanvas(document.getElementById('sidebar'));
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
@@ -63,7 +123,32 @@
                 const modal = new bootstrap.Modal(document.getElementById('serviceModal'));
                 modal.show();
             });
-
+            // Image preview
+            const imageInput = document.getElementById('imageLocation');
+            const imagePreview = document.getElementById('imagePreview');
+            imageInput.addEventListener('change', () => {
+                imagePreview.innerHTML = '';
+                const files = imageInput.files;
+                if (files.length > 5) {
+                    alert('Tối đa 5 hình ảnh!');
+                    imageInput.value = '';
+                    return;
+                }
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'preview-image';
+                            img.alt = 'Preview';
+                            imagePreview.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            })
         }
 
         // Load lại tất cả marker từ backend
@@ -89,20 +174,63 @@
                             }
                         });
 
-                        const info = new google.maps.InfoWindow({
-                            content: `<strong>${service.name}</strong><br>${service.description}`
+
+                        m.addListener("click", () => {
+                            // Cập nhật nội dung Offcanvas
+                            document.getElementById("sidebar-title").innerText = service.name;
+                            document.getElementById("sidebar-description").innerText = service.description;
+                            // Cập nhật liên kết Google Maps
+                            const mapLink = document.getElementById("sidebar-map-link");
+                            mapLink.href = `https://www.google.com/maps?q=${service.latitude},${service.longitude}`;
+
+                            const imageContainer = document.getElementById("sidebar-images");
+                            imageContainer.innerHTML = 'Đang tải ảnh...';
+                            // Gọi API lấy ảnh
+                            fetch(`/api/tourism/images/${service.id}`)
+                                .then(res => {
+                                    if (!res.ok) {
+                                        throw new Error('Không thể lấy ảnh: ' + res.status);
+                                    }
+                                    return res.json();
+                                })
+                                .then(images => {
+                                    imageContainer.innerHTML = '';
+                                    if (images && images.length > 0) {
+                                        images.forEach(img => {
+                                            const imgElement = document.createElement('img');
+                                            imgElement.src = img.imagePath;
+                                            imgElement.className = 'preview-image';
+                                            imgElement.alt = 'Ảnh du lịch';
+                                            imageContainer.appendChild(imgElement);
+                                        });
+                                    } else {
+                                        imageContainer.innerText = 'Không có ảnh';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Lỗi khi lấy ảnh:', error);
+                                    imageContainer.innerText = 'Lỗi tải ảnh';
+                                });
+                            // Hiển thị Offcanvas
+                            sidebar.show();
+                            // Kích hoạt resize bản đồ
+                            resizeMap();
                         });
 
-                        m.addListener("click", () => info.open(map, m));
                         allMarkers.push(m);
                     });
                 });
         }
-
+        function resizeMap() {
+            google.maps.event.trigger(map, "resize");
+        }
         window.onload = initMap;
     </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/labelMarker.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"
+        integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 
 </html>

@@ -1,6 +1,8 @@
 package com.example.beautifulweb.controller.map;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,15 +13,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.beautifulweb.model.Tourism;
+import com.example.beautifulweb.model.TourismImage;
 import com.example.beautifulweb.repository.TourismRepository;
 import com.example.beautifulweb.service.TourismService;
+import com.example.beautifulweb.service.ToursimImageService;
 
 @RestController
 public class TourismRestController {
     private TourismService tourismService;
     private final TourismRepository tourismRepository;
+    private final ToursimImageService tourismImageService;
 
-    public TourismRestController(TourismService tourismService, TourismRepository tourismRepository) {
+    public TourismRestController(TourismService tourismService, TourismRepository tourismRepository, ToursimImageService tourismImageService) {
+        this.tourismImageService = tourismImageService;
         this.tourismRepository = tourismRepository;
         this.tourismService = tourismService;
     }
@@ -29,12 +35,15 @@ public class TourismRestController {
         return tourismService.getAll();
     }
 
-    // Lấy theo ID
-    @GetMapping("/api/tourism/{id}")
-    public ResponseEntity<Tourism> getById(@PathVariable Long id) {
-        return tourismRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/api/tourism/images/{id}")
+    public ResponseEntity<List<TourismImage>> getTourismImageById(@PathVariable Long id) {
+        try {
+            List<TourismImage> images = tourismImageService.getImagesByTourismId(id);
+            return ResponseEntity.ok(images);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
     // Xóa
@@ -45,6 +54,21 @@ public class TourismRestController {
         }
         tourismRepository.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/api/tourism/{id}/images")
+    public ResponseEntity<Set<TourismImage>> getTourismImages(@PathVariable Long id) {
+        try {
+            Optional<Tourism> tourism = tourismRepository.findById(id);
+            if (tourism.isPresent()) {
+                return ResponseEntity.ok(tourism.get().getImages());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
     // Cập nhật

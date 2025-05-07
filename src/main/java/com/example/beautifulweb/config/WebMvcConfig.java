@@ -1,5 +1,6 @@
 package com.example.beautifulweb.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -11,7 +12,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-
 	@Bean
 	public SpringResourceTemplateResolver templateResolver() {
 		SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -38,9 +38,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		return viewResolver;
 	}
 
+	@Value("${upload.folder.images}")
+	private String imageUploadPath;
+
 	@SuppressWarnings("null")
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/resources/images/**")
+				.addResourceLocations("file:" + imageUploadPath + "/");
+
 		registry.addResourceHandler("/**")
 				.addResourceLocations("classpath:/static/");
 

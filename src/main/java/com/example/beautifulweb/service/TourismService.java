@@ -38,4 +38,9 @@ public class TourismService {
         repository.save(tourism);
     } 
 
+    public Tourism getById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    
 }

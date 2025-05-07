@@ -1,11 +1,18 @@
 package com.example.beautifulweb.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
@@ -20,5 +27,10 @@ public class Tourism {
     private double latitude;
     private double longitude;
 
-
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "tourism")
+    @JsonIgnore
+    private Set<TourismImage> images = new HashSet<>(); // Danh sách ảnh liên quan đến đối tượng Tourism này
+    
+    
 }
