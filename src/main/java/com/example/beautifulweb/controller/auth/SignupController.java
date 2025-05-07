@@ -1,53 +1,60 @@
 package com.example.beautifulweb.controller.auth;
 
 import com.example.beautifulweb.model.User;
-import com.example.beautifulweb.service.EmailService;
+import com.example.beautifulweb.service.RecaptchaService;
 import com.example.beautifulweb.service.UserService;
+import com.example.beautifulweb.config.RecaptchaConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.validation.Valid;
 
 @Controller
 public class SignupController {
+
+    private static final Logger logger = LoggerFactory.getLogger(SignupController.class);
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private EmailService emailService;
+    private RecaptchaService recaptchaService;
+
+    @Autowired
+    private RecaptchaConfig recaptchaConfig;
 
     @GetMapping("/signup")
-    public String signup(Model model) {
+    public String showSignupForm(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("recaptchaSiteKey", recaptchaConfig.getSiteKey());
         return "signup";
     }
 
     @PostMapping("/signup")
-    public String signupUser(@ModelAttribute("user") User user, Model model) {
-        if (userService.findByEmail(user.getEmail()) != null) {
-            model.addAttribute("error", "Email already exists.");
-            return "signup";
-        }
+    public String processSignup(@Valid @ModelAttribute("user") User user, BindingResult result,
+            @RequestParam(value = "g-recaptcha-response", required = false) String recaptchaResponse, Model model) {
+
+        // Kiểm tra xem tên đăng nhập hoặc email đã tồn tại chưa
         if (userService.findByUsername(user.getUsername()) != null) {
-            model.addAttribute("error", "Username already exists.");
+            model.addAttribute("error", "Tên đăng nhập đã được sử dụng.");
+            return "redirect:/signup?existed";
+        }
+        if (userService.findByEmail(user.getEmail()) != null) {
+            model.addAttribute("error", "Email đã được sử dụng.");
+            model.addAttribute("recaptchaSiteKey", recaptchaConfig.getSiteKey());
             return "signup";
         }
 
-        try {
-            userService.saveUser(user);
-            String subject = "Welcome to Côn Đảo Wanderlust!";
-            String body = "Dear " + user.getUsername() + ",\n\n" +
-                    "Thank you for registering with Côn Đảo Wanderlust! Your account has been successfully created.\n" +
-                    "You can now log in using your username: " + user.getUsername() + "\n\n" +
-                    "Best regards,\nThe Côn Đảo Wanderlust Team";
-            emailService.sendEmail(user.getEmail(), subject, body);
-        } catch (Exception e) {
-            model.addAttribute("error", "Error saving user: " + e.getMessage());
-            return "signup";
-        }
+        // Lưu người dùng mới với role USER
+        user.setRole("USER");
+        userService.saveUser(user);
 
         return "redirect:/login?success";
     }

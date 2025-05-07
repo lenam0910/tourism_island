@@ -40,26 +40,12 @@ public class LoginController {
 
     @GetMapping("/logout")
     public String logout() {
-        return "redirect:/login?logout"; // Redirect về trang đăng nhập với thông báo logout
+        return "redirect:/login?logout";
     }
 
     @GetMapping("/access-denied")
     public String accessDenied() {
-        return "access-denied"; // Trả về file access-denied.html
+        return "access-denied";
     }
 
-    @PostMapping("/login")
-    public String signupUser(@ModelAttribute("user") User user, Model model) {
-        User existingUser = userService.findByUsername(user.getUsername());
-        if (existingUser == null) {
-            model.addAttribute("error", "Username or Password is not correct!");
-            return "login";
-        }
-
-        if (!userService.checkPassword(user.getPassword(), existingUser.getPassword())) {
-            model.addAttribute("error", "Username or Password is not correct!");
-            return "login";
-        }
-        return "redirect:/login?success";
-    }
 }

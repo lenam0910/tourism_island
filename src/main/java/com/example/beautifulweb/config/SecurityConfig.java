@@ -22,9 +22,9 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/login", "/signup", "/forgot-password", "/reset-password", "/css/**",
-								"/js/**")
-						.permitAll()
+						.requestMatchers("/login", "/resend-code", "/signup", "/forgot-password", "/reset-password",
+								"/css/**", "/js/**", "/manager/**")
+						.permitAll() // Cho phép truy cập tài nguyên tĩnh trong /manager/**
 						.requestMatchers("/admin/**").hasRole("ADMIN")
 						.anyRequest().authenticated())
 				.formLogin(form -> form
@@ -37,7 +37,7 @@ public class SecurityConfig {
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/login?logout")
 						.invalidateHttpSession(true)
-						.deleteCookies("JSESSIONID", "remember-me") // Xóa cookie remember-me khi đăng xuất
+						.deleteCookies("JSESSIONID") // Xóa cookie remember-me khi đăng xuất
 						.permitAll())
 				.rememberMe(rememberMe -> rememberMe // Kích hoạt Remember Me
 						.key("uniqueAndSecretKey") // Khóa để mã hóa token

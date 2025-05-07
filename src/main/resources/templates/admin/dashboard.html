@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin-Manage Company</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/manager/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/manager/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/manager/css/style.css" rel="stylesheet">
+    <!-- Toastr library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"
+        integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="container-fluid position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div th:replace="~{layout/spinner-recruiter :: spinner-recruiter}"></div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <div th:replace="~{layout/sidebar-admin :: sidebar-admin}"></div>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <div th:replace="~{layout/navbar-recruiter :: navbar-recruiter}"></div>
+            <!-- Navbar End -->
+
+            <!-- Sale & Revenue Start -->
+            <div class="container-fluid pt-4 px-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="/admin/account">
+                            <div class="card h-100 mb-3 text-center hover-shadow">
+                                <div class="card-body text-white bg-primary">
+                                    <h5 class="card-title text-white">Số lượng tài khoản đang hoạt động
+                                    </h5>
+                                </div>
+                                <div class="card-footer bg-light ">
+                                    <h1 class="text-primary" th:text="${activeUserNumber}"></h1>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/admin/manage-company">
+                            <div class="card h-100 mb-3 text-center hover-shadow">
+                                <div class="card-body text-white bg-warning">
+                                    <h5 class="card-title text-white">Số lượng công ty đang hoạt động
+                                    </h5>
+                                </div>
+                                <div class="card-footer bg-light">
+                                    <h1 class="text-warning" th:text="${activeCompanyNumber}"></h1>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/admin/manage-company">
+                            <div class="card h-100 mb-3 text-center hover-shadow">
+                                <div class="card-body text-white bg-success">
+                                    <h5 class="card-title text-white">Số lượng công ty chờ kích hoạt
+                                    </h5>
+                                </div>
+                                <div class="card-footer bg-light">
+                                    <h1 class="text-success" th:text="${inactiveCompanyNumber}"></h1>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/admin/feedback-support">
+                            <div class="card h-100 mb-3 text-center hover-shadow">
+                                <div class="card-body text-white bg-danger">
+                                    <h5 class="card-title text-white">Số lượng yêu cầu hỗ trợ
+                                    </h5>
+                                </div>
+                                <div class="card-footer bg-light">
+                                    <h1 class="text-danger"  th:text="${uncheckSupportRequestNumber}"></h1>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row mt-2 g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Thống kê việc làm theo cấp độ</h6>
+                            <canvas id="bar-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-6 ">
+                        <div class="bg-light rounded h-100 p-4 row d-flex justify-content-center
+                         align-items-center flex-column">
+                            <h6 class="mb-4">Thống kê việc làm theo kĩ năng</h6>
+                            <div class=" col-sm-12 col-xl-8">
+                                <canvas id="doughnut-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Content End -->
+            <!-- Footer Start -->
+            <div th:replace="~{layout/footer-recruiter :: footer-recruiter}"></div>
+            <!-- Footer End -->
+
+        </div>
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"
+            integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!-- Template Javascript -->
+        <script src="/manager/lib/chart/chart.min.js"></script>
+        <script src="/manager/js/main.js"></script>
+        <script th:inline="javascript">
+            (function ($) {
+                "use strict";
+                // Fetch data from Thymeleaf
+                var jobLevels = /*[[${jobCountByLevel.keySet()}]]*/[];
+                var jobCounts = /*[[${jobCountByLevel.values()}]]*/[];
+
+                console.log(jobLevels);
+                // Bar Chart (Jobs by Level)
+                var ctx4 = document.getElementById("bar-chart").getContext("2d");
+                var myChart4 = new Chart(ctx4, {
+                    type: "bar",
+                    data: {
+                        labels: jobLevels, // Dynamic job levels from Thymeleaf
+                        datasets: [{
+                            label: "Số lượng công việc",
+                            backgroundColor: "rgba(0, 156, 255, .7)",
+                            borderColor: "rgba(0, 156, 255, 1)",
+                            data: jobCounts
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+
+                // Fetch data from Thymeleaf
+                var jobSkills = /*[[${popularSkillDesc.keySet()}]]*/[];
+                var skillCounts = /*[[${popularSkillDesc.values()}]]*/[];
+                // Doughnut Chart
+                var ctx6 = $("#doughnut-chart").get(0).getContext("2d");
+                var myChart6 = new Chart(ctx6, {
+                    type: "doughnut",
+                    data: {
+                        labels: jobSkills,
+                        datasets: [{
+                            backgroundColor: [
+                                "rgba(0, 156, 255, .7)",
+                                "rgba(0, 156, 255, .6)",
+                                "rgba(0, 156, 255, .5)",
+                                "rgba(0, 156, 255, .4)",
+                                "rgba(0, 156, 255, .3)",
+                                "rgba(255, 99, 132, .6)",
+                                "rgba(255, 159, 64, .6)",
+                                "rgba(54, 162, 235, .6)",
+                                "rgba(75, 192, 192, .6)",
+                                "rgba(153, 102, 255, .6)"
+                            ],
+                            data: skillCounts
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            })(jQuery);
+
+        </script>
+
+</body>
+
+</html>

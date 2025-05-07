@@ -14,23 +14,32 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false)
+    private String fullName;
+
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "reset_token")
     private String resetToken;
 
-    @Column(name = "reset_token_expiry")
     private LocalDateTime resetTokenExpiry;
 
     @Column(nullable = false)
     private String role;
 
+    // Constructors
     public User() {
-        this.role = "USER"; // Vai trò mặc định
+    }
+
+    public User(String username, String fullName, String email, String password, String role) {
+        this.username = username;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     // Getters and Setters
@@ -48,6 +57,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {

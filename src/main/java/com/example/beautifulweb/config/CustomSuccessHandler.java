@@ -35,7 +35,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         HttpSession session = request.getSession(false);
         if (session == null) {
             logger.warn("Session is null, cannot store user information.");
-            redirectStrategy.sendRedirect(request, response, "/");
+            redirectStrategy.sendRedirect(request, response, "/?login-success");
             return;
         }
 
@@ -56,7 +56,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             logger.warn("User '{}' not found in database.", username);
         }
 
-        // Check if "Remember Me" was selected and store/remove preference in a cookie
+        // Check if "Remember Me" was selected and store preference in a cookie
         String rememberMe = request.getParameter("remember-me");
         if ("on".equals(rememberMe)) {
             Cookie rememberMeCookie = new Cookie("rememberMePreference", "true");
@@ -75,7 +75,13 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         clearAuthenticationAttributes(session);
 
         // Redirect based on role
-        String targetUrl = (user != null && "ROLE_ADMIN".equals(user.getRole())) ? "/admin/dashboard" : "/";
+        String targetUrl;
+        if (user != null && "ADMIN".equals(user.getRole())) {
+            targetUrl = "/dashboard?login-success"; // Chuyển hướng đến /dashboard cho admin
+        } else {
+            targetUrl = "/?login-success"; // User thường về trang chủ
+        }
+
         if (!response.isCommitted()) {
             redirectStrategy.sendRedirect(request, response, targetUrl);
         }
