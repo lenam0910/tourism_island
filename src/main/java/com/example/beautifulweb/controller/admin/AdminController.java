@@ -20,7 +20,7 @@ public class AdminController {
     @GetMapping("/dashboard")
     public String showAdminDashboard(Model model) {
         // model.addAttribute("services", serviceService.getAllServices());
-        return "admin/manage-account";
+        return "admin/dashboard";
     }
 
     // @GetMapping("/add-service")

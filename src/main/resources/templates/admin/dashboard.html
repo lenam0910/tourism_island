@@ -36,11 +36,6 @@
 
 <body>
     <div class="container-fluid position-relative bg-white d-flex p-0">
-        <!-- Spinner Start -->
-        <div th:replace="~{layout/spinner-recruiter :: spinner-recruiter}"></div>
-        <!-- Spinner End -->
-
-
         <!-- Sidebar Start -->
         <div th:replace="~{layout/sidebar-admin :: sidebar-admin}"></div>
         <!-- Sidebar End -->
@@ -48,94 +43,8 @@
 
         <!-- Content Start -->
         <div class="content">
-            <!-- Navbar Start -->
-            <div th:replace="~{layout/navbar-recruiter :: navbar-recruiter}"></div>
-            <!-- Navbar End -->
 
-            <!-- Sale & Revenue Start -->
-            <div class="container-fluid pt-4 px-4">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                    </ol>
-                </nav>
-                <div class="row">
-                    <div class="col-md-3">
-                        <a href="/admin/account">
-                            <div class="card h-100 mb-3 text-center hover-shadow">
-                                <div class="card-body text-white bg-primary">
-                                    <h5 class="card-title text-white">Số lượng tài khoản đang hoạt động
-                                    </h5>
-                                </div>
-                                <div class="card-footer bg-light ">
-                                    <h1 class="text-primary" th:text="${activeUserNumber}"></h1>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="/admin/manage-company">
-                            <div class="card h-100 mb-3 text-center hover-shadow">
-                                <div class="card-body text-white bg-warning">
-                                    <h5 class="card-title text-white">Số lượng công ty đang hoạt động
-                                    </h5>
-                                </div>
-                                <div class="card-footer bg-light">
-                                    <h1 class="text-warning" th:text="${activeCompanyNumber}"></h1>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="/admin/manage-company">
-                            <div class="card h-100 mb-3 text-center hover-shadow">
-                                <div class="card-body text-white bg-success">
-                                    <h5 class="card-title text-white">Số lượng công ty chờ kích hoạt
-                                    </h5>
-                                </div>
-                                <div class="card-footer bg-light">
-                                    <h1 class="text-success" th:text="${inactiveCompanyNumber}"></h1>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="/admin/feedback-support">
-                            <div class="card h-100 mb-3 text-center hover-shadow">
-                                <div class="card-body text-white bg-danger">
-                                    <h5 class="card-title text-white">Số lượng yêu cầu hỗ trợ
-                                    </h5>
-                                </div>
-                                <div class="card-footer bg-light">
-                                    <h1 class="text-danger" th:text="${uncheckSupportRequestNumber}"></h1>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="row mt-2 g-4">
-                    <div class="col-sm-12 col-xl-6">
-                        <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Thống kê việc làm theo cấp độ</h6>
-                            <canvas id="bar-chart"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xl-6 ">
-                        <div class="bg-light rounded h-100 p-4 row d-flex justify-content-center
-                         align-items-center flex-column">
-                            <h6 class="mb-4">Thống kê việc làm theo kĩ năng</h6>
-                            <div class=" col-sm-12 col-xl-8">
-                                <canvas id="doughnut-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
             <!-- Content End -->
-            <!-- Footer Start -->
-            <div th:replace="~{layout/footer-recruiter :: footer-recruiter}"></div>
-            <!-- Footer End -->
 
         </div>
         <!-- Back to Top -->
