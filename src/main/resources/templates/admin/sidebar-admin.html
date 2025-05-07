@@ -1,0 +1,51 @@
+<div class="sidebar pe-4 pb-3" th:fragment="sidebar-admin">
+    <nav class="navbar bg-light navbar-light">
+        <a href="/" class="navbar-brand mx-4 mb-3">
+            <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
+        </a>
+        <div class="d-flex align-items-center ms-4 mb-4">
+            <div class="position-relative">
+                <img th:if="${session.provider == 'LOCAL'}" class="rounded-circle me-lg-2"
+                    th:src="${session.provider == 'LOCAL' && session.avatar != null ? '/avatar/' + session.avatar : (session.avatar != null ? session.avatar : '/avatar/avatar-trang-4.jpg')}"
+                    alt="" style="width: 40px; height: 40px;">
+                <img th:if="${session.provider != 'LOCAL'}" class="rounded-circle me-lg-2"
+                    th:src="${session.avatar != null ? session.avatar : '/avatar/avatar-trang-4.jpg'}" alt=""
+                    style="width: 40px; height: 40px;">
+                <div
+                    class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
+                </div>
+            </div>
+            <div class="ms-3">
+                <h6 class="mb-0"><span class="d-none d-lg-inline-flex" th:text="${session.fullName}"></span></h6>
+                <span>Admin</span>
+            </div>
+        </div>
+        <div class="navbar-nav w-100">
+            <a href="/admin/dashboard" class="nav-item nav-link">
+                <i class="fa fa-tachometer-alt me-2"></i>Bảng điều khiển
+            </a>
+
+            <a href="/admin/account" class="nav-item nav-link">
+                <i class="fa fa-users me-2"></i>Quản lý tài khoản
+            </a>
+
+            <a href="/admin/manage-company" class="nav-item nav-link">
+                <i class="fa fa-building me-2"></i>Công ty
+            </a>
+
+            <a href="/admin/manage-skill" class="nav-item nav-link">
+                <i class="fa fa-lightbulb me-2"></i>Kĩ năng
+            </a>
+
+            <a href="/admin/edit-admin" class="nav-item nav-link">
+                <i class="fa fa-user me-2"></i>Tài khoản của tôi
+            </a>
+            <a href="/admin/review-report" class="nav-item nav-link">
+                <i class="fa fa-flag me-2"></i>Báo cáo
+            </a>
+            <a href="/admin/feedback" class="nav-item nav-link">
+                <i class="fa fa-comment me-2"></i>Phản hồi
+            </a>
+        </div>
+    </nav>
+</div>

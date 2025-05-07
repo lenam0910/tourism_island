@@ -107,7 +107,7 @@
                                     </h5>
                                 </div>
                                 <div class="card-footer bg-light">
-                                    <h1 class="text-danger"  th:text="${uncheckSupportRequestNumber}"></h1>
+                                    <h1 class="text-danger" th:text="${uncheckSupportRequestNumber}"></h1>
                                 </div>
                             </div>
                         </a>
@@ -151,67 +151,7 @@
         <!-- Template Javascript -->
         <script src="/manager/lib/chart/chart.min.js"></script>
         <script src="/manager/js/main.js"></script>
-        <script th:inline="javascript">
-            (function ($) {
-                "use strict";
-                // Fetch data from Thymeleaf
-                var jobLevels = /*[[${jobCountByLevel.keySet()}]]*/[];
-                var jobCounts = /*[[${jobCountByLevel.values()}]]*/[];
 
-                console.log(jobLevels);
-                // Bar Chart (Jobs by Level)
-                var ctx4 = document.getElementById("bar-chart").getContext("2d");
-                var myChart4 = new Chart(ctx4, {
-                    type: "bar",
-                    data: {
-                        labels: jobLevels, // Dynamic job levels from Thymeleaf
-                        datasets: [{
-                            label: "Số lượng công việc",
-                            backgroundColor: "rgba(0, 156, 255, .7)",
-                            borderColor: "rgba(0, 156, 255, 1)",
-                            data: jobCounts
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: { beginAtZero: true }
-                        }
-                    }
-                });
-
-                // Fetch data from Thymeleaf
-                var jobSkills = /*[[${popularSkillDesc.keySet()}]]*/[];
-                var skillCounts = /*[[${popularSkillDesc.values()}]]*/[];
-                // Doughnut Chart
-                var ctx6 = $("#doughnut-chart").get(0).getContext("2d");
-                var myChart6 = new Chart(ctx6, {
-                    type: "doughnut",
-                    data: {
-                        labels: jobSkills,
-                        datasets: [{
-                            backgroundColor: [
-                                "rgba(0, 156, 255, .7)",
-                                "rgba(0, 156, 255, .6)",
-                                "rgba(0, 156, 255, .5)",
-                                "rgba(0, 156, 255, .4)",
-                                "rgba(0, 156, 255, .3)",
-                                "rgba(255, 99, 132, .6)",
-                                "rgba(255, 159, 64, .6)",
-                                "rgba(54, 162, 235, .6)",
-                                "rgba(75, 192, 192, .6)",
-                                "rgba(153, 102, 255, .6)"
-                            ],
-                            data: skillCounts
-                        }]
-                    },
-                    options: {
-                        responsive: true
-                    }
-                });
-            })(jQuery);
-
-        </script>
 
 </body>
 
