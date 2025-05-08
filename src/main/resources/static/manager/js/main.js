@@ -227,7 +227,9 @@
     case "verification-success":
       toastr.success("Account verification successful", "Success");
       break;
-
+    case "email_existed":
+      toastr.error("Email is existed", "Error");
+      break;
 
     case "send-email-admin":
       toastr.success("Email sent to user successfully!", "Success");

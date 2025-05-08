@@ -49,7 +49,7 @@ public class SignupController {
         if (userService.findByEmail(user.getEmail()) != null) {
             model.addAttribute("error", "Email đã được sử dụng.");
             model.addAttribute("recaptchaSiteKey", recaptchaConfig.getSiteKey());
-            return "signup";
+            return "redirect:/signup?email_existed";
         }
 
         // Lưu người dùng mới với role USER
