@@ -20,19 +20,18 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(Model model, HttpSession session) {
-        if (session.getAttribute("userId") != null) {
-            User user = userService.getUserById((Long) session.getAttribute("userId"));
-            TourBooking tourBooking = new TourBooking();
-            tourBooking.setName(user.getFullName());
-            tourBooking.setEmail(user.getEmail());
+        TourBooking tourBooking = new TourBooking();
 
-            model.addAttribute("tourBooking", tourBooking);
-
-        } else {
-            TourBooking tourBooking = new TourBooking();
-            model.addAttribute("tourBooking", tourBooking);
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                tourBooking.setName(user.getFullName());
+                tourBooking.setEmail(user.getEmail());
+            }
         }
 
+        model.addAttribute("tourBooking", tourBooking);
         return "index";
     }
 

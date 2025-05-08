@@ -192,6 +192,15 @@
     case "update-success":
       toastr.success("Information updated successfully", "Success");
       break;
+    case "update-fail":
+      toastr.error("Failed to update information", "Error");
+      break;
+    case "add-account-success":
+      toastr.success("Account added successfully", "Success");
+      break;
+    case "add-account-fail":
+      toastr.error("Failed to add account", "Error");
+      break;
     case "deactivate-success":
       toastr.success("Account deactivation successful", "Success");
       break;

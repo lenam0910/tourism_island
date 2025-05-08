@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.beautifulweb.config.AppConfig;
 import com.example.beautifulweb.model.TourBooking;
 import com.example.beautifulweb.model.Tourism;
 import com.example.beautifulweb.model.User;
@@ -29,11 +30,14 @@ public class AdminController {
     private final UserService userService;
     private final BookingService bookingService;
     private final TourismService tourismService;
+    private final AppConfig appConfig;
 
-    public AdminController(BookingService bookingService, UserService userService, TourismService tourismService) {
+    public AdminController(BookingService bookingService, UserService userService, TourismService tourismService,
+            AppConfig appConfig) {
         this.tourismService = tourismService;
         this.userService = userService;
         this.bookingService = bookingService;
+        this.appConfig = appConfig;
     }
 
     @GetMapping("/dashboard")
@@ -92,8 +96,47 @@ public class AdminController {
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userPage.getTotalPages());
-
+        model.addAttribute("newUser", new User());
+        model.addAttribute("editUser", new User());
         return "admin/users";
     }
 
+    @PostMapping("/users/new")
+    public String addUser(
+            @ModelAttribute("newUser") @Valid User newUser,
+            BindingResult result,
+            Model model) {
+        if (result.hasErrors()) {
+
+            return "redirect:/admin/users?add-account-fail";
+        }
+        newUser.setPassword(appConfig.passwordEncoder().encode(newUser.getPassword()));
+        userService.saveUser(newUser);
+        return "redirect:/admin/users?add-account-success";
+    }
+
+    @PostMapping("/users/edit")
+    public String editUser(
+            @ModelAttribute("editUser") @Valid User editUser,
+            BindingResult result,
+            Model model) {
+        if (result.hasErrors()) {
+            return "redirect:/admin/users?update-fail";
+        }
+        User existingUser = userService.findById(editUser.getId());
+        existingUser.setUsername(editUser.getUsername());
+        existingUser.setFullName(editUser.getFullName());
+        existingUser.setEmail(editUser.getEmail());
+        existingUser.setRole(editUser.getRole());
+        userService.saveUser(existingUser);
+        return "redirect:/admin/users?update-success";
+    }
+
+    @PostMapping("/users/delete")
+    public String deleteUser(
+            @RequestParam Long id,
+            Model model) {
+        userService.deleteUser(id);
+        return "redirect:/admin/users?delete-user-success";
+    }
 }

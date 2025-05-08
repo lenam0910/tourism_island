@@ -3,6 +3,7 @@ package com.example.beautifulweb.controller.auth;
 import com.example.beautifulweb.model.User;
 import com.example.beautifulweb.service.RecaptchaService;
 import com.example.beautifulweb.service.UserService;
+import com.example.beautifulweb.config.AppConfig;
 import com.example.beautifulweb.config.RecaptchaConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,9 @@ import jakarta.validation.Valid;
 public class SignupController {
 
     private static final Logger logger = LoggerFactory.getLogger(SignupController.class);
+
+    @Autowired
+    private AppConfig appConfig;
 
     @Autowired
     private UserService userService;
@@ -51,7 +55,7 @@ public class SignupController {
             model.addAttribute("recaptchaSiteKey", recaptchaConfig.getSiteKey());
             return "redirect:/signup?email_existed";
         }
-
+        user.setPassword(appConfig.passwordEncoder().encode(user.getPassword()));
         // Lưu người dùng mới với role USER
         user.setRole("USER");
         userService.saveUser(user);
