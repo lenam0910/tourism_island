@@ -63,8 +63,6 @@ public class TourismController {
             // Cập nhật thông tin của đối tượng Tourism
             existingTourism.setName(tourism.getName());
             existingTourism.setDescription(tourism.getDescription());
-            existingTourism.setLatitude(tourism.getLatitude());
-            existingTourism.setLongitude(tourism.getLongitude());
             existingTourism.setPackages(tourism.getPackages());
             existingTourism.setPrice(tourism.getPrice());
 
