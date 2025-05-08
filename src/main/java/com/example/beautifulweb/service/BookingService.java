@@ -2,6 +2,7 @@ package com.example.beautifulweb.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.example.beautifulweb.model.TourBooking;
@@ -25,6 +26,10 @@ public class BookingService {
 
     public TourBooking getBookingById(Long id) {
         return tourBookingRepository.findById(id).orElse(null);
+    }
+
+    public Page<TourBooking> findAll(org.springframework.data.domain.Pageable pageable) {
+        return tourBookingRepository.findAll(pageable);
     }
 
     public void deleteBooking(Long id) {

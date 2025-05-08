@@ -86,6 +86,27 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <nav aria-label="Pagination navigation">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/admin/tourism-manage(page=${currentPage-1})}"
+                                        aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                                    th:classappend="${currentPage + 1 == i} ? 'active'">
+                                    <a class="page-link" th:href="@{/admin/tourism-manage(page=${i-1})}"
+                                        th:text="${i}"></a>
+                                </li>
+                                <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/admin/tourism-manage(page=${currentPage+1})}"
+                                        aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
 

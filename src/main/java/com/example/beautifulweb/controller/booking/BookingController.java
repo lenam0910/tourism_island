@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.beautifulweb.model.TourBooking;
 import com.example.beautifulweb.repository.TourBookingRepository;
+import com.example.beautifulweb.service.EmailService;
 
 import jakarta.validation.Valid;
 
@@ -24,6 +25,12 @@ import java.util.List;
 public class BookingController {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a");
+    private final EmailService emailService;
+
+    public BookingController(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
     @Autowired
     private TourBookingRepository tourBookingRepository;
 
@@ -64,8 +71,10 @@ public class BookingController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid booking ID: " + id));
         booking.setConfirmed(true);
         tourBookingRepository.save(booking);
+        emailService.sendBookingConfirmationEmail(booking.getEmail(), booking.getName(), booking.getDestination(),
+                booking.getDatetime().format(formatter));
 
         model.addAttribute("message", "Tour booking confirmed successfully!");
-        return "redirect:/admin/bookings";
+        return "redirect:/admin/bookings?confirm_booking";
     }
 }

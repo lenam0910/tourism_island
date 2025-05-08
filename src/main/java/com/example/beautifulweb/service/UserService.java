@@ -2,6 +2,8 @@ package com.example.beautifulweb.service;
 
 import com.example.beautifulweb.model.User;
 import com.example.beautifulweb.repository.UserRepository;
+
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,6 +33,10 @@ public class UserService implements UserDetailsService {
                 .password(user.getPassword())
                 .roles(user.getRole())
                 .build();
+    }
+
+    public Page<User> findAll(org.springframework.data.domain.Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public User findByUsername(String username) {

@@ -23,6 +23,7 @@ public class HomeController {
         if (session.getAttribute("userId") != null) {
             User user = userService.getUserById((Long) session.getAttribute("userId"));
             TourBooking tourBooking = new TourBooking();
+            tourBooking.setName(user.getFullName());
             tourBooking.setEmail(user.getEmail());
 
             model.addAttribute("tourBooking", tourBooking);

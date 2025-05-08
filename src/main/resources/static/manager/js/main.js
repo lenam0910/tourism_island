@@ -225,25 +225,10 @@
     case "email_existed":
       toastr.error("Email is existed", "Error");
       break;
+    case "confirm_booking":
+      toastr.success("Booking confirmed", "Success");
+      break;
 
-    case "send-email-admin":
-      toastr.success("Email sent to user successfully!", "Success");
-      break;
-    case "pwd-length-error":
-      toastr.error("Password must be at least 6 characters long", "Error");
-      break;
-    case "delete-review-success":
-      toastr.success("Review deleted successfully", "Success");
-      break;
-    case "add-company-success":
-      toastr.success("Company added successfully", "Success");
-      break;
-    case "add-image-success":
-      toastr.success("Image added successfully", "Success");
-      break;
-    case "update-image-success":
-      toastr.success("Image updated successfully", "Success");
-      break;
 
   }
 })(jQuery);
