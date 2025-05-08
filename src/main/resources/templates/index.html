@@ -229,7 +229,8 @@
                         <div class="modal-body">
                             <p id="modal-description"></p>
                             <div id="modal-images"></div>
-                            <a id="modal-map-link" href="#" target="_blank" class="btn mt-3" style="color: white;">View on
+                            <a id="modal-map-link" href="#" target="_blank" class="btn mt-3" style="color: white;">View
+                                on
                                 Google Maps</a>
                         </div>
                         <div class="modal-footer">
@@ -566,15 +567,17 @@
                                     <div class="form-floating">
                                         <select class="form-select bg-transparent" id="destination"
                                             th:field="*{destination}" required>
-                                            <option value="Thailand">Thailand</option>
-                                            <option value="Indonesia">Indonesia</option>
-                                            <option value="Malaysia">Malaysia</option>
-                                            <option value="Australia">Australia</option>
+                                            <option value="" disabled selected>Chọn điểm đến</option>
+                                            <option th:each="dest : ${destinations}" th:value="${dest}"
+                                                th:text="${dest}"></option>
                                         </select>
                                         <label for="destination">Destination</label>
                                         <div th:if="${#fields.hasErrors('destination')}" th:errors="*{destination}"
                                             style="color: red;"></div>
                                     </div>
+                                </div>
+                                <div th:if="${destinations.isEmpty()}">
+                                    <p style="color: red;">Không có điểm đến nào khả dụng.</p>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">

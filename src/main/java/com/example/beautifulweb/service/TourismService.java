@@ -34,4 +34,17 @@ public class TourismService {
         return repository.findById(id).orElse(null);
     }
 
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
+    public List<String> getAllDestinations() {
+        List<String> destinations = repository.findAll().stream()
+                .map(Tourism::getName)
+                .filter(name -> name != null && !name.isEmpty())
+                .distinct()
+                .collect(Collectors.toList());
+        System.out.println("Destinations in service: " + destinations); // Log để debug
+        return destinations;
+    }
 }
