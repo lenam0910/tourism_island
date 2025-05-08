@@ -11,8 +11,11 @@ import com.example.beautifulweb.model.Tourism;
 import com.example.beautifulweb.model.TourismImage;
 import com.example.beautifulweb.repository.TourismRepository;
 import com.example.beautifulweb.service.FileService;
+import com.example.beautifulweb.service.TourismService;
 import com.example.beautifulweb.service.ToursimImageService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.ui.Model;
 
 
 @Controller
@@ -20,14 +23,25 @@ public class TourismController {
     private final TourismRepository tourismRepository;
     private final FileService fileService;
     private final ToursimImageService tourismImageService;
+    private final TourismService tourismService;
 
     public TourismController(TourismRepository tourismRepository, FileService fileService,
-            ToursimImageService tourismImageService) {
+            ToursimImageService tourismImageService, TourismService tourismService) {
+        this.tourismService = tourismService;
         this.tourismImageService = tourismImageService;
         this.fileService = fileService;
         this.tourismRepository = tourismRepository;
     }
-
+@GetMapping("admin/tourism-manage/view/{tourismId}")
+public String viewTourism(@PathVariable Long tourismId, Model model) {
+    // Tìm kiếm đối tượng Tourism theo ID
+    Tourism tourisms = tourismService.getById(tourismId);
+    List<TourismImage> images = tourismImageService.getImagesByTourismId(tourismId);
+    model.addAttribute("tourism", tourisms); // Thêm đối tượng Tourism vào model
+    model.addAttribute("images", images); // Thêm danh sách hình ảnh vào model
+    return "admin/tourism-detail"; // Trả về view hiển thị thông tin chi tiết
+    
+}
     @PostMapping("/add")
     public String addTourism(
             @RequestParam String name,
@@ -55,7 +69,7 @@ public class TourismController {
                     if (fileName != null && !fileName.isEmpty()) {
                         TourismImage tourismImage = new TourismImage();
                         // Đường dẫn để hiển thị qua HTTP (đã cấu hình trong WebConfig)
-                        tourismImage.setImagePath("/resources/images/tourism/" + fileName);
+                        tourismImage.setImagePath("/uploads/images/tourism/" + fileName);
                         tourismImage.setTourism(tourism);
                         tourismImageService.saveTourismImage(tourismImage);
                         tourism.getImages().add(tourismImage);

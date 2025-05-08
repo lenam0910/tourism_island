@@ -292,6 +292,15 @@
                             document.getElementById("sidebar-description").innerText = service.description;
                             document.getElementById("sidebar-map-link").href = `https://www.google.com/maps?q=${service.latitude},${service.longitude}`;
 
+                            //attach view detail href
+                            document.getElementById("sidebar-view-detail").href = `/admin/tourism-manage/view/${service.id}`;
+
+                            // Xử lý xóa điểm du lịch
+                            const deleteButton = document.getElementById("deleteButton");
+                            deleteButton.onclick = function () {
+                                deleteTourism(service.id);
+                            };
+
                             const imageContainer = document.getElementById("sidebar-images");
                             imageContainer.innerHTML = 'Loading images...';
 
@@ -344,6 +353,33 @@
                         allMarkers.push(marker);
                     });
                 });
+        }
+
+        function deleteTourism(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will permanently delete the tourism item.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/api/tourism/delete/${id}`,
+                        type: 'GET',
+                        success: function () {
+                            Swal.fire('Deleted!', 'The tourism item has been deleted.', 'success');
+                            sidebar.hide();  // Đóng sidebar sau khi xóa thành công
+                            loadMarkers();  // Cập nhật lại bản đồ
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'Failed to delete tourism.', 'error');
+                        }
+                    });
+                }
+            });
         }
 
         window.onload = initMap;

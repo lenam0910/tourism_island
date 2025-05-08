@@ -11,4 +11,5 @@ public interface TourismRepository extends JpaRepository<Tourism, Long> {
     // This interface extends JpaRepository to provide CRUD operations for the TourismService entity.
     // It allows us to perform database operations without writing boilerplate code.
     // We can add custom query methods here if needed.
+    void deleteById(Long id);
 }
