@@ -30,10 +30,14 @@
             </div>
             <div th:if="${session.username != null}" class="d-flex align-items-center ms-3">
                 <span class="user-greeting">Hi, <span th:text="${session.username}"></span></span>
-                <a href="/logout" class="btn-logout" title="Logout">
-                    <i class="bi bi-box-arrow-right text-primary" style="margin-left: 15px;"></i>
-                </a>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn-logout" title="Logout"
+                        style="border: none; background: none;background-color: transparent !important ; padding: 0; cursor: pointer;">
+                        <i class="bi bi-box-arrow-right text-primary" style="margin-left: 15px;"></i>
+                    </button>
+                </form>
             </div>
+
         </div>
     </nav>
 </div>
