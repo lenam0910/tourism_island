@@ -5,13 +5,18 @@ package com.example.beautifulweb.controller.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.beautifulweb.model.User;
 import com.example.beautifulweb.service.BookingService;
 import com.example.beautifulweb.service.UserService;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
@@ -50,6 +55,13 @@ public class AdminController {
     public String showBooking(Model model) {
         model.addAttribute("bookings", bookingService.getAllBookings());
         return "admin/bookings";
+    }
+
+    // Hiển thị danh sách người dùng
+    @GetMapping("/users")
+    public String listUsers(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return "admin/users";
     }
 
     // @GetMapping("/add-service")
