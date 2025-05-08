@@ -39,7 +39,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script async defer
-        src="https://maps.gomaps.pro/maps/api/js?key=AlzaSymd04nEXFHqc1-lWvkUWcMihigYWV4vgYi&libraries=places&callback=initMap"></script>
+        src="https://maps.gomaps.pro/maps/api/js?key=AlzaSyvdTBSn84ioV2MQy1dhczs5iAgmbEmrjjN&libraries=places&callback=initMap"></script>
 
     <style>
         #map {
@@ -78,6 +78,22 @@
             width: 100%;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
+        rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $('#datetime').datetimepicker({
+                format: 'MM/DD/YYYY h:mm A', // Định dạng chính xác
+                useCurrent: false
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -516,45 +532,58 @@
                     </div>
                     <div class="col-md-6">
                         <h1 class="text-white mb-4">Book A Tour</h1>
-                        <form>
+                        <form th:action="@{/book-tour}" th:object="${tourBooking}" method="post" id="bookTourForm">
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="form-floating">
                                         <input type="text" class="form-control bg-transparent" id="name"
-                                            placeholder="Your Name">
+                                            th:field="*{name}" placeholder="Your Name" required>
                                         <label for="name">Your Name</label>
+                                        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                                            style="color: red;"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
                                         <input type="email" class="form-control bg-transparent" id="email"
-                                            placeholder="Your Email">
+                                            th:field="*{email}" placeholder="Your Email" required>
                                         <label for="email">Your Email</label>
+                                        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                                            style="color: red;"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating date" id="date3" data-target-input="nearest">
                                         <input type="text" class="form-control bg-transparent datetimepicker-input"
-                                            id="datetime" placeholder="Date & Time" data-target="#date3"
-                                            data-toggle="datetimepicker" />
+                                            id="datetime" th:field="*{datetime}" placeholder="Date & Time"
+                                            data-target="#date3" data-toggle="datetimepicker" required>
                                         <label for="datetime">Date & Time</label>
+                                        <div th:if="${#fields.hasErrors('datetime')}" th:errors="*{datetime}"
+                                            style="color: red;"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <select class="form-select bg-transparent" id="select1">
-                                            <option value="1">Destination 1</option>
-                                            <option value="2">Destination 2</option>
-                                            <option value="3">Destination 3</option>
+                                        <select class="form-select bg-transparent" id="destination"
+                                            th:field="*{destination}" required>
+                                            <option value="Thailand">Thailand</option>
+                                            <option value="Indonesia">Indonesia</option>
+                                            <option value="Malaysia">Malaysia</option>
+                                            <option value="Australia">Australia</option>
                                         </select>
-                                        <label for="select1">Destination</label>
+                                        <label for="destination">Destination</label>
+                                        <div th:if="${#fields.hasErrors('destination')}" th:errors="*{destination}"
+                                            style="color: red;"></div>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <textarea class="form-control bg-transparent" placeholder="Special Request"
-                                            id="message" style="height: 100px"></textarea>
-                                        <label for="message">Special Request</label>
+                                            id="specialRequest" th:field="*{specialRequest}"
+                                            style="height: 100px"></textarea>
+                                        <label for="specialRequest">Special Request</label>
+                                        <div th:if="${#fields.hasErrors('specialRequest')}"
+                                            th:errors="*{specialRequest}" style="color: red;"></div>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -567,7 +596,7 @@
             </div>
         </div>
     </div>
-    <!-- Booking Start -->
+    <!-- Booking End -->
 
 
     <!-- Process Start 

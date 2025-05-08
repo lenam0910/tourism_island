@@ -176,6 +176,9 @@
     case "logout":
       toastr.success("Logout successful", "Success");
       break;
+    case "success-booking":
+      toastr.success("Booking successful", "Success");
+      break;
     case "login-success":
       toastr.success("Login successful", "Success");
       break;
