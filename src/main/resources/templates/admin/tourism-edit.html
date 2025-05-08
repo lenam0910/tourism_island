@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Admin - Service List</title>
+    <title>Admin - Service Update</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -56,64 +56,35 @@
                 </nav>
 
                 <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">Service Detail</h6>
-                    <form th:object="${tourism}">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="tourismName" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="tourismName" th:field="*{name}" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="tourismPrice" class="form-label">Price</label>
-                                <input type="number" class="form-control" id="tourismPrice" th:field="*{price}" readonly>
-                            </div>
+                    <h6 class="mb-4">Service List</h6>
+                    <form th:action="@{/update/{id}(id=${tourism.id})}" method="post" th:object="${tourism}"
+                        enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="tourismName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="tourismName" th:field="*{name}">
                         </div>
-                        <div class="mb-3">
-                            <label for="tourismDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="tourismDescription" rows="3" th:field="*{description}" readonly></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tourismPackages" class="form-label">Packages</label>
-                            <textarea class="form-control" id="packages" rows="3" th:field="*{packages}" readonly></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tourismImages" class="form-label">Images</label>
-                            <div class="d-flex flex-wrap gap-2">
-                                <div th:if="${#lists.isEmpty(images)}" class="text-center">No images available</div>
-                            </div>
-                            <div id="tourismImages" class="d-flex flex-wrap gap-2">
-                                <div th:each="image : ${images}">
-                                    <img th:src="@{${image.imagePath}}" alt="Tourism Image" class="img-thumbnail" style="max-width: 290px; max-height: 300px;">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Tourism Detail Modal -->
-                <div class="modal fade" id="tourismDetailModal" tabindex="-1" aria-labelledby="tourismDetailLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="tourismDetailLabel">Tourism Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Đóng"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>Name:</strong> <span id="modalTourismName"></span></p>
-                                <p><strong>Description:</strong> <span id="modalTourismDescription"></span></p>
-                                <p><strong>Price:</strong> <span id="modalTourismPrice"></span></p>
-                                <p><strong>Packages:</strong></p>
-                                <pre id="modalTourismPackages"
-                                    style="white-space:pre-wrap; background-color: #f8f9fa; padding: 10px;"></pre>
-                                <p><strong>Images:</strong></p>
-                                <div id="modalTourismImages" class="d-flex flex-wrap gap-2"></div>
-                            </div>
+                        <div class="col-md-6">
+                            <label for="tourismPrice" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="tourismPrice" th:field="*{price}">
                         </div>
                     </div>
+                    <div class="mb-3">
+                        <label for="tourismDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="tourismDescription" rows="3"
+                            th:field="*{description}"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tourismPackages" class="form-label">Packages</label>
+                        <textarea class="form-control" id="packages" rows="3" th:field="*{packages}"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tourismImagesUpload" class="form-label">Upload Images</label>
+                        <input type="file" class="form-control" id="tourismImagesUpload" name="images" multiple>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
                 </div>
-                <!-- End Tourism Detail Modal -->
 
             </div>
             <!-- Main Content End -->

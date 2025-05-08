@@ -237,34 +237,6 @@
                 document.getElementById("lng").value = lngClicked;
                 new bootstrap.Modal(document.getElementById('serviceModal')).show();
             });
-
-            document.getElementById('imageLocation').addEventListener('change', () => {
-                const imagePreview = document.getElementById('imagePreview');
-                const files = imageLocation.files;
-                imagePreview.innerHTML = '';
-                if (files.length > 4) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'maximum 4 images',
-                        text: 'Please select no more than 4 images.',
-                        confirmButtonText: 'OK',
-                    });
-                    imageInput.value = '';
-                    return;
-                }
-                for (const file of files) {
-                    if (file.type.match('image.*')) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.className = 'preview-image';
-                            imagePreview.appendChild(img);
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                }
-            });
         }
 
         function loadMarkers() {
@@ -382,7 +354,40 @@
             });
         }
 
-        window.onload = initMap;
+        window.onload = () => {
+            initMap();
+
+            const imageLocation = document.getElementById('imageLocation');
+            const imagePreview = document.getElementById('imagePreview');
+
+            imageLocation.addEventListener('change', () => {
+                const files = imageLocation.files;
+                imagePreview.innerHTML = '';
+                if (files.length > 4) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Maximum 4 images',
+                        text: 'Please select no more than 4 images.',
+                        confirmButtonText: 'OK',
+                    });
+                    imageLocation.value = '';
+                    return;
+                }
+                for (const file of files) {
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'preview-image';
+                            imagePreview.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+        };
+
     </script>
 
     <!--Js libraries-->

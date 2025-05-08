@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.ui.Model;
 
-
 @Controller
 public class TourismController {
     private final TourismRepository tourismRepository;
@@ -32,16 +31,27 @@ public class TourismController {
         this.fileService = fileService;
         this.tourismRepository = tourismRepository;
     }
-@GetMapping("admin/tourism-manage/view/{tourismId}")
-public String viewTourism(@PathVariable Long tourismId, Model model) {
-    // Tìm kiếm đối tượng Tourism theo ID
-    Tourism tourisms = tourismService.getById(tourismId);
-    List<TourismImage> images = tourismImageService.getImagesByTourismId(tourismId);
-    model.addAttribute("tourism", tourisms); // Thêm đối tượng Tourism vào model
-    model.addAttribute("images", images); // Thêm danh sách hình ảnh vào model
-    return "admin/tourism-detail"; // Trả về view hiển thị thông tin chi tiết
-    
-}
+
+    @GetMapping("admin/tourism-manage/view/{tourismId}")
+    public String viewTourism(@PathVariable Long tourismId, Model model) {
+        // Tìm kiếm đối tượng Tourism theo ID
+        Tourism tourisms = tourismService.getById(tourismId);
+        List<TourismImage> images = tourismImageService.getImagesByTourismId(tourismId);
+        model.addAttribute("tourism", tourisms); // Thêm đối tượng Tourism vào model
+        model.addAttribute("images", images); // Thêm danh sách hình ảnh vào model
+        return "admin/tourism-detail"; // Trả về view hiển thị thông tin chi tiết
+
+    }
+
+    @GetMapping("admin/tourism-manage/edit/{tourismId}")
+    public String editTourism(@PathVariable Long tourismId, Model model) {
+        Tourism tourism = tourismService.getById(tourismId);
+        model.addAttribute("tourism", tourism); 
+        List<TourismImage> images = tourismImageService.getImagesByTourismId(tourismId);
+        model.addAttribute("images", images); // Thêm danh sách hình ảnh vào model
+        return "admin/tourism-edit"; 
+    }
+
     @PostMapping("/add")
     public String addTourism(
             @RequestParam String name,

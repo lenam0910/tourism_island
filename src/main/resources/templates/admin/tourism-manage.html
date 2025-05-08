@@ -51,7 +51,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/admin/map">Create Service</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Service List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Services Overview</li>
                     </ol>
                 </nav>
 
@@ -78,8 +78,8 @@
                                     <td>
                                         <a th:href="@{'/admin/tourism-manage/view/' + ${tourism.id}}"
                                             class="btn btn-secondary btn-sm view-tourism-btn">View</a>
-                                        <button class="btn btn-primary btn-sm"
-                                            th:onclick="'editTourism(' + ${tourism.id} + ')'">Edit</button>
+                                        <a th:href="@{'/admin/tourism-manage/edit/' + ${tourism.id}}"
+                                            class="btn btn-primary btn-sm">Edit</a>
                                         <button class="btn btn-danger btn-sm"
                                             th:onclick="'deleteTourism(' + ${tourism.id} + ')'">Delete</button>
                                     </td>
