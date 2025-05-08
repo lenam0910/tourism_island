@@ -83,7 +83,7 @@
                                     <td th:text="${booking.id}"></td>
                                     <td th:text="${booking.name}"></td>
                                     <td th:text="${booking.email}"></td>
-                                    <td th:text="${booking.datetime}"></td>
+                                    <td th:text="${#temporals.format(booking.datetime, 'MM/dd/yyyy h:mm a')}"></td>
                                     <td th:text="${booking.destination}"></td>
                                     <td th:text="${booking.specialRequest}"></td>
                                     <td th:text="${booking.confirmed ? 'Confirmed' : 'Pending'}"></td>

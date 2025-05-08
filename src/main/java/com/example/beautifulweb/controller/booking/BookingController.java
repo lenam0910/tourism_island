@@ -58,13 +58,6 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/admin/bookings")
-    public String showBookings(Model model) {
-        List<TourBooking> bookings = tourBookingRepository.findAll();
-        model.addAttribute("bookings", bookings);
-        return "admin/bookings";
-    }
-
     @PostMapping("/admin/confirm-booking")
     public String confirmBooking(@RequestParam Long id, Model model) {
         TourBooking booking = tourBookingRepository.findById(id)

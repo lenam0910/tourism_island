@@ -10,12 +10,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.beautifulweb.service.BookingService;
+import com.example.beautifulweb.service.UserService;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
     // @Autowired
     // private ServiceService serviceService;
+
+    @Autowired
+    private UserService userService;
+
+    private final BookingService bookingService;
+
+    public AdminController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
 
     @GetMapping("/dashboard")
     public String showAdminDashboard(Model model) {
@@ -25,8 +37,19 @@ public class AdminController {
 
     @GetMapping("/map")
     public String showMap(Model model) {
-        // model.addAttribute("services", serviceService.getAllServices());
         return "admin/map";
+    }
+
+    @GetMapping("/user")
+    public String showUser(Model model) {
+        // model.addAttribute("services", serviceService.getAllServices());
+        return "admin/user";
+    }
+
+    @GetMapping("/bookings")
+    public String showBooking(Model model) {
+        model.addAttribute("bookings", bookingService.getAllBookings());
+        return "admin/bookings";
     }
 
     // @GetMapping("/add-service")
