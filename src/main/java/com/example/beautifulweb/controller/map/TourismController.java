@@ -32,8 +32,10 @@ public class TourismController {
     public String addTourism(
             @RequestParam String name,
             @RequestParam String description,
+            @RequestParam String packages,
             @RequestParam double latitude,
             @RequestParam double longitude,
+            @RequestParam double price,
             @RequestParam("imageLocation") List<MultipartFile> imageLocation) {
 
         Tourism tourism = new Tourism();
@@ -41,6 +43,8 @@ public class TourismController {
         tourism.setDescription(description);
         tourism.setLatitude(latitude);
         tourism.setLongitude(longitude);
+        tourism.setPackages(packages);
+        tourism.setPrice(price);
         tourism = tourismRepository.save(tourism);
 
         if (imageLocation != null && !imageLocation.isEmpty()) {
@@ -61,7 +65,7 @@ public class TourismController {
             tourismRepository.save(tourism);
         }
 
-        return "redirect:/admin/map";
+        return "redirect:/admin/map?add-success";
     }
 
 }

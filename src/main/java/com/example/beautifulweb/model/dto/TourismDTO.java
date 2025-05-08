@@ -9,6 +9,8 @@ public class TourismDTO {
     private String description;
     private double latitude;
     private double longitude;
+    private double price;
+    private String packages;
     private List<String> images;
 
     public Long getId() {
@@ -59,4 +61,20 @@ public class TourismDTO {
         this.images = images;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getPackages() {
+        return packages;
+    }
+
+    public void setPackages(String packages) {
+        this.packages = packages;
+    }
+    
 }

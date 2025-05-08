@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,14 +29,12 @@ public class Tourism {
     private double longitude;
     private double price;
 
+    @Column(columnDefinition = "TEXT")
+    private String packages;
+
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "tourism")
     @JsonIgnore
     private Set<TourismImage> images = new HashSet<>(); // Danh sách ảnh liên quan đến đối tượng Tourism này
-    
-    @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "tourism")
-    @JsonIgnore
-    private Set<Package> packages = new HashSet<>(); // Danh sách gói liên quan đến đối tượng Tourism này
     
 }

@@ -101,11 +101,10 @@
     });
   });
 
-  // For TinyMCE editor
-  if (document.getElementById("description")) {
+  // tinymce editor
+  if (document.getElementById("packages")) {
     tinymce.init({
-      selector: "textarea#description",
-      height: 500,
+      selector: 'textarea#packages',
       plugins: [
         "advlist",
         "autolink",
@@ -125,8 +124,7 @@
         "help",
         "wordcount",
       ],
-      toolbar:
-        "undo redo | blocks | " +
+      toolbar: "undo redo | blocks | " +
         "bold italic backcolor | alignleft aligncenter " +
         "alignright alignjustify | bullist numlist outdent indent | " +
         "removeformat | help",
@@ -193,9 +191,6 @@
       break;
     case "update-success":
       toastr.success("Information updated successfully", "Success");
-      break;
-    case "update-avatar-success":
-      toastr.success("Avatar updated successfully", "Success");
       break;
     case "deactivate-success":
       toastr.success("Account deactivation successful", "Success");

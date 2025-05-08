@@ -1,7 +1,5 @@
 package com.example.beautifulweb.controller.admin;
 
-// import com.example.beautifulweb.model.Service;
-// import com.example.beautifulweb.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.beautifulweb.model.User;
 import com.example.beautifulweb.service.BookingService;
+import com.example.beautifulweb.service.TourismService;
 import com.example.beautifulweb.service.UserService;
 
 import jakarta.validation.Valid;
@@ -22,22 +21,25 @@ import jakarta.validation.Valid;
 @RequestMapping("/admin")
 public class AdminController {
 
-    // @Autowired
-    // private ServiceService serviceService;
-
-    @Autowired
-    private UserService userService;
-
+    private final UserService userService;
     private final BookingService bookingService;
+    private final TourismService tourismService;
 
-    public AdminController(BookingService bookingService) {
+    public AdminController(BookingService bookingService, UserService userService, TourismService tourismService) {
+        this.tourismService = tourismService;
+        this.userService = userService;
         this.bookingService = bookingService;
     }
 
     @GetMapping("/dashboard")
     public String showAdminDashboard(Model model) {
-        // model.addAttribute("services", serviceService.getAllServices());
         return "admin/dashboard";
+    }
+
+    @GetMapping("/tourism-manage")
+    public String showTourismManage(Model model) {
+        model.addAttribute("tourismList", tourismService.getAll());
+        return "admin/tourism-manage";
     }
 
     @GetMapping("/map")
@@ -47,7 +49,6 @@ public class AdminController {
 
     @GetMapping("/user")
     public String showUser(Model model) {
-        // model.addAttribute("services", serviceService.getAllServices());
         return "admin/user";
     }
 
@@ -64,21 +65,4 @@ public class AdminController {
         return "admin/users";
     }
 
-    // @GetMapping("/add-service")
-    // public String showAddServiceForm(Model model) {
-    // model.addAttribute("service", new Service());
-    // return "admin/add-service";
-    // }
-
-    // @PostMapping("/add-service")
-    // public String addService(@ModelAttribute("service") Service service, Model
-    // model) {
-    // try {
-    // serviceService.saveService(service);
-    // model.addAttribute("success", "Service added successfully!");
-    // } catch (Exception e) {
-    // model.addAttribute("error", "Error adding service: " + e.getMessage());
-    // }
-    // return "admin/add-service";
-    // }
 }

@@ -32,6 +32,11 @@ button,
     border-color: #17a3b8 !important;
 }
 
+a #modoal-map-link {
+    color: #FFFFFF !important;
+    
+}
+
 .fw-medium {
     font-weight: 600 !important;
 }

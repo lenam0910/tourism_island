@@ -5,6 +5,13 @@
     --dark: #191C24;
 }
 
+.toast-success {
+    background-color: #28a745 !important;
+    /* Màu nền */
+    color: white !important;
+    /* Màu chữ */
+}
+
 .back-to-top {
     position: fixed;
     display: none;
@@ -71,7 +78,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    width: 250px;
+    width: 280px;
     height: 100vh;
     overflow-y: auto;
     background: var(--light);
@@ -80,7 +87,7 @@
 }
 
 .content {
-    margin-left: 250px;
+    margin-left: 280px;
     min-height: 100vh;
     background: #FFFFFF;
     transition: 0.5s;
@@ -275,8 +282,9 @@
     background: var(--dark);
     border-color: var(--primary);
 }
+
 .hover-shadow:hover {
     transform: scale(1.05);
     transition: 0.3s ease-in-out;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
+}
