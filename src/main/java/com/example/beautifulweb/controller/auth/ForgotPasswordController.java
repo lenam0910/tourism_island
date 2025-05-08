@@ -80,6 +80,19 @@ public class ForgotPasswordController {
         model.addAttribute("hashedCode", hashedCode);
         return "reset-password";
     }
+    
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam("userId") Long userId,
+            @RequestParam("hashedCode") String hashedCode, Model model) {
+        User user = userService.findById(userId);
+        if (user == null || !user.getResetToken().equals(hashedCode)) {
+            model.addAttribute("error", "Invalid or expired verification code.");
+            return "forgot-password";
+        }
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("hashedCode", hashedCode);
+        return "reset-password";
+    }
 
     @PostMapping("/reset-password")
     public String processResetPassword(@RequestParam("id") Long userId,

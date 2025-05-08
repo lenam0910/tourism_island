@@ -1,9 +1,13 @@
 package com.example.beautifulweb.config;
 
 import com.example.beautifulweb.service.UserService;
+
+import jakarta.servlet.DispatcherType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,11 +25,11 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-				.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/login", "/resend-code", "/signup", "/forgot-password", "/reset-password",
-								"/uploads/**", "/book-tour",
-								"/css/**",
+				.authorizeHttpRequests(authorize -> authorize
+						.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE)
+						.permitAll()
+						.requestMatchers("/login", "/resend-code", "/signup", "/forgot-password/**", "/reset-password",
+								"/uploads/**", "/book-tour", "/css/**",
 								"/js/**", "/img/**", "/api/**", "/lib/**", "/manager/**", "/user/**", "/home", "/map",
 								"/")
 						.permitAll()
