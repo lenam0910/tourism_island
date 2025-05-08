@@ -18,7 +18,7 @@ public class HomeController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String home(Model model, HttpSession session) {
         if (session.getAttribute("userId") != null) {
             User user = userService.getUserById((Long) session.getAttribute("userId"));
@@ -33,5 +33,11 @@ public class HomeController {
         }
 
         return "index";
+    }
+
+    @GetMapping("/")
+    public String index(Model model, HttpSession session) {
+
+        return "redirect:/home"; // Redirect to the home page
     }
 }
