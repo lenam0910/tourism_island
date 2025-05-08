@@ -19,6 +19,7 @@
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     <!-- Libraries Stylesheet -->
     <link href="/manager/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
@@ -49,9 +50,8 @@
             <div class="container-fluid pt-4 px-4">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/admin/manage-company">Công ty</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Thêm công ty</li>
+                        <li class="breadcrumb-item"><a href="/admin/map">Create Service</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Service List</li>
                     </ol>
                 </nav>
 
@@ -71,13 +71,13 @@
                                 <tr th:if="${#lists.isEmpty(tourismList)}">
                                     <td colspan="4" class="text-center">No data available</td>
                                 </tr>
-                                <tr th:each="tourism : ${tourismList}">
+                                <tr th:each="tourism : ${tourismList}" th:attr="data-id=${tourism.id}">
                                     <td th:text="${tourism.id}"></td>
                                     <td th:text="${tourism.name}"></td>
                                     <td th:text="${tourism.description}"></td>
                                     <td>
-                                        <button class="btn btn-secondary btn-sm"
-                                            th:onclick="'viewTourism(' + ${tourism.id} + ')'">View</button>
+                                        <a th:href="@{'/admin/tourism-manage/view/' + ${tourism.id}}"
+                                            class="btn btn-secondary btn-sm view-tourism-btn">View</a>
                                         <button class="btn btn-primary btn-sm"
                                             th:onclick="'editTourism(' + ${tourism.id} + ')'">Edit</button>
                                         <button class="btn btn-danger btn-sm"
@@ -109,32 +109,6 @@
                         </nav>
                     </div>
                 </div>
-
-                <!-- Tourism Detail Modal -->
-                <div class="modal fade" id="tourismDetailModal" tabindex="-1" aria-labelledby="tourismDetailLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="tourismDetailLabel">Tourism Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Đóng"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>Name:</strong> <span id="modalTourismName"></span></p>
-                                <p><strong>Description:</strong> <span id="modalTourismDescription"></span></p>
-                                <p><strong>Price:</strong> <span id="modalTourismPrice"></span></p>
-                                <p><strong>Packages:</strong></p>
-                                <pre id="modalTourismPackages"
-                                    style="white-space:pre-wrap; background-color: #f8f9fa; padding: 10px;"></pre>
-                                <p><strong>Images:</strong></p>
-                                <div id="modalTourismImages" class="d-flex flex-wrap gap-2"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Tourism Detail Modal -->
-
             </div>
             <!-- Main Content End -->
         </div>
@@ -143,41 +117,40 @@
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
-
     <script>
-        function viewTourism(id) {
-            $.ajax({
-                url: '/api/tourism/' + id,
-                method: 'GET',
-                success: function (data) {
-                    $('#modalTourismName').text(data.name);
-                    $('#modalTourismDescription').text(data.description);
-                    $('#modalTourismPrice').text(data.price + ' VND');
-                    $('#modalTourismPackages').text(data.packages);
-
-                    // Hiển thị ảnh
-                    const imageContainer = $('#modalTourismImages');
-                    imageContainer.empty();
-                    data.images.forEach(img => {
-                        imageContainer.append(`<img src="${img.imageUrl}" class="img-thumbnail" style="width: 120px; height: auto;">`);
+        function deleteTourism(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will permanently delete the tourism item.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/api/tourism/delete/${id}`,
+                        type: 'GET',
+                        success: function () {
+                            Swal.fire('Deleted!', 'The tourism item has been deleted.', 'success');
+                            $(`tr[data-id='${id}']`).remove(); // Xóa hàng trong bảng
+                        },
+                        error: function (xhr) {
+                            Swal.fire('Error!', 'Failed to delete tourism.', 'error');
+                        }
                     });
-
-                    // Hiển thị modal
-                    $('#tourismDetailModal').modal('show');
-                },
-                error: function () {
-                    alert('Không thể tải thông tin chi tiết.');
                 }
             });
         }
+
     </script>
-
-
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/manager/lib/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"
         integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>

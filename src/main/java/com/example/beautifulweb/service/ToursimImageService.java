@@ -26,4 +26,11 @@ public class ToursimImageService {
     public List<TourismImage> getImagesByTourismId(Long tourismId) {
         return tourismImageRepository.findByTourismId(tourismId);
     }
+
+    public void deleteImagesByTourismId(Long tourismId) {
+        List<TourismImage> images = tourismImageRepository.findByTourismId(tourismId);
+        for (TourismImage image : images) {
+            tourismImageRepository.delete(image);
+        }
+    }
 }

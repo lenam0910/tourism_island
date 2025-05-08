@@ -12,4 +12,5 @@ public interface ToursimImageRepository extends JpaRepository<TourismImage, Long
     // Các phương thức truy vấn tùy chỉnh nếu cần
     // Ví dụ: tìm kiếm theo đường dẫn ảnh hoặc theo đối tượng Tourism
     List<TourismImage> findByTourismId(Long tourismId); // Tìm ảnh theo id của đối tượng Tourism
+    void deleteByTourismId(Long tourismId); // Xóa ảnh theo id của đối tượng Tourism
 }
