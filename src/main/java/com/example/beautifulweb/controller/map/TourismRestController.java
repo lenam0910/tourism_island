@@ -107,4 +107,29 @@ public class TourismRestController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/api/tourism/nearby")
+    public List<Tourism> getNearbyServices(
+            @RequestParam("lat") double lat,
+            @RequestParam("lng") double lng,
+            @RequestParam("radius") double radius) {
+        List<Tourism> allTourisms = tourismService.getAll();
+        return allTourisms.stream()
+                .filter(tourism -> {
+                    double distance = calculateDistance(lat, lng, tourism.getLatitude(), tourism.getLongitude());
+                    return distance <= radius / 1000; // Chuyển mét thành km
+                })
+                .collect(Collectors.toList());
+    }
+
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // Bán kính Trái Đất (km)
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                        * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
 }

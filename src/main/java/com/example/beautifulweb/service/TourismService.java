@@ -47,4 +47,5 @@ public class TourismService {
         System.out.println("Destinations in service: " + destinations); // Log để debug
         return destinations;
     }
+
 }
