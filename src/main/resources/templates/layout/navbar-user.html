@@ -28,6 +28,9 @@
             <div th:if="${session.username == null}">
                 <a href="/signup" class="btn btn-primary rounded-pill py-2 px-4 btn-register">Register</a>
             </div>
+            <div th:if="${session.username == null}">
+                <a href="/login" class="btn btn-primary rounded-pill py-2 px-4 ms-2 btn-register">Login</a>
+            </div>
             <div th:if="${session.username != null}" class="d-flex align-items-center ms-3">
                 <span class="user-greeting">Hi, <span th:text="${session.username}"></span></span>
                 <form th:action="@{/logout}" method="post" style="display: inline;">

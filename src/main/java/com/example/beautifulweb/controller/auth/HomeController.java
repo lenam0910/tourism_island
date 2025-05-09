@@ -3,6 +3,7 @@ package com.example.beautifulweb.controller.auth;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
@@ -18,6 +19,9 @@ import jakarta.servlet.http.HttpSession;
 public class HomeController {
     private final UserService userService;
     private final TourismService tourismService;
+
+    @Value("${gomaps.key}")
+    private String gomapsKey;
 
     public HomeController(UserService userService, TourismService tourismService) {
         this.tourismService = tourismService;
@@ -37,6 +41,7 @@ public class HomeController {
             }
         }
         List<String> destinations = tourismService.getAllDestinations();
+        model.addAttribute("MAPS_API_KEY", gomapsKey);
         model.addAttribute("tourBooking", tourBooking);
         model.addAttribute("destinations", destinations);
         return "index";

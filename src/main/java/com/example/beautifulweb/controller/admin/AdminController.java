@@ -1,6 +1,7 @@
 package com.example.beautifulweb.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,9 @@ public class AdminController {
     private final BookingService bookingService;
     private final TourismService tourismService;
     private final AppConfig appConfig;
+
+    @Value("${gomaps.key}")
+    private String gomapsKey;
 
     public AdminController(BookingService bookingService, UserService userService, TourismService tourismService,
             AppConfig appConfig) {
@@ -76,6 +80,8 @@ public class AdminController {
 
     @GetMapping("/map")
     public String showMap(Model model) {
+        // Thêm khóa API vào model để sử dụng trong view
+        model.addAttribute("MAPS_API_KEY", gomapsKey);
         return "admin/map";
     }
 

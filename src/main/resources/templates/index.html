@@ -37,9 +37,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"
         integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <!--update api key in application.properties-->
     <script async defer
-        src="https://maps.gomaps.pro/maps/api/js?key=AlzaSyvdTBSn84ioV2MQy1dhczs5iAgmbEmrjjN&libraries=places&callback=initMap"></script>
+        th:src="'https://maps.gomaps.pro/maps/api/js?key=' + ${MAPS_API_KEY} + '&libraries=places&callback=initMap'"></script>
 
     <style>
         #map {
@@ -148,7 +148,7 @@
                         <h1 class="display-3 text-white mb-3 animated slideInDown">Enjoy Your Vacation With Us</h1>
                         <p class="fs-4 text-white mb-4 animated slideInDown">Tempor erat elitr rebum at clita diam amet
                             diam et eos erat ipsum lorem sit</p>
-                            <!--feature will be updated later-->
+                        <!--feature will be updated later-->
                         <!-- <div class="position-relative w-75 mx-auto animated slideInDown">
                             <input class="form-control border-0 rounded-pill w-100 py-3 ps-4 pe-5" type="text"
                                 placeholder="Eg: Thailand">
@@ -176,11 +176,14 @@
                 </div>
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
                     <h6 class="section-title bg-white text-start text-primary pe-3">About Us</h6>
-                    <h1 class="mb-4">Welcome to <span class="text-primary">Tourist</span></h1>
-                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et
-                        eos. Clita erat ipsum et lorem et sit.</p>
-                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et
-                        eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet
+                    <h1 class="mb-4">Welcome to <span class="text-primary">Con Dao</span></h1>
+                    <p class="mb-4">A pristine paradise in the middle of the sea! Located off the southern coast of
+                        Vietnam, Con Dao is famous for its stunning beaches, crystal-clear waters, and diverse
+                        ecosystems.</p>
+                    <p class="mb-4">It is the
+                        perfect destination for those who love nature, history, and tranquility, promising you an
+                        unforgettable
+                        experience!
                     </p>
                     <div class="row gy-2 gx-4 mb-4">
                         <div class="col-sm-6">
@@ -1181,7 +1184,7 @@
             initMap();
         });
         window.initMap = initMap;
-    </script> 
+    </script>
 </body>
 
 </html>
