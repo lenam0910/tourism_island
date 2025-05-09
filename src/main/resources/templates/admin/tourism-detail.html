@@ -65,16 +65,26 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="tourismPrice" class="form-label">Price</label>
-                                <input type="number" class="form-control" id="tourismPrice" th:field="*{price}" readonly>
+                                <input type="number" class="form-control" id="tourismPrice" th:field="*{price}"
+                                    readonly>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="tourismDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="tourismDescription" rows="3" th:field="*{description}" readonly></textarea>
+                            <textarea class="form-control" id="tourismDescription" rows="3" th:field="*{description}"
+                                readonly></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="tourismPackages" class="form-label">Packages</label>
-                            <textarea class="form-control" id="packages" rows="3" th:field="*{packages}" readonly></textarea>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="tourismPackages" class="form-label">Packages</label>
+                                <textarea class="form-control" id="tinymce-editor" rows="3"
+                                    th:field="*{packages}"></textarea>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="tourismTimelineTimeline" class="form-label">Timeline</label>
+                                <textarea class="form-control" id="tinymce-editor" rows="3"
+                                    th:field="*{timeline}"></textarea>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="tourismImages" class="form-label">Images</label>
@@ -83,7 +93,8 @@
                             </div>
                             <div id="tourismImages" class="d-flex flex-wrap gap-2">
                                 <div th:each="image : ${images}">
-                                    <img th:src="@{${image.imagePath}}" alt="Tourism Image" class="img-thumbnail" style="max-width: 290px; max-height: 300px;">
+                                    <img th:src="@{${image.imagePath}}" alt="Tourism Image" class="img-thumbnail"
+                                        style="max-width: 290px; max-height: 300px;">
                                 </div>
                             </div>
                         </div>
@@ -129,7 +140,7 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.tiny.cloud/1/pd1b89f7c2wlx1ymkpon1lvkrbyca5nym46yd8recd0hvxng/tinymce/7/tinymce.min.js"
-    referrerpolicy="origin"></script>
+        referrerpolicy="origin"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"
         integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>

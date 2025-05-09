@@ -102,9 +102,9 @@
   });
 
   // tinymce editor
-  if (document.getElementById("packages")) {
+  if (document.getElementById("tinymce-editor")) {
     tinymce.init({
-      selector: 'textarea#packages',
+      selector: 'textarea#tinymce-editor',
       plugins: [
         "advlist",
         "autolink",

@@ -64,38 +64,47 @@ public class TourismController {
             existingTourism.setName(tourism.getName());
             existingTourism.setDescription(tourism.getDescription());
             existingTourism.setPackages(tourism.getPackages());
+            existingTourism.setTimeline(tourism.getTimeline());
             existingTourism.setPrice(tourism.getPrice());
 
             // Lưu đối tượng Tourism đã cập nhật vào cơ sở dữ liệu
             tourismRepository.save(existingTourism);
         }
-        List<TourismImage> images = tourismImageService.getImagesByTourismId(tourismId);
-        if (images != null && !images.isEmpty()) {
-            tourismImageService.deleteImagesByTourismId(tourismId);
-            for (TourismImage image : images) {
-                String fullPath = image.getImagePath(); // Ví dụ: /uploads/images/tourism/xxx.jpg
-                String fileName = Paths.get(fullPath).getFileName().toString(); // Lấy ra chỉ tên file
-                fileService.handleDeleteImage(fileName, "tourism");
-            }
-        }
         if (imageLocation != null && !imageLocation.isEmpty()) {
-            for (MultipartFile file : imageLocation) {
-                if (!file.isEmpty()) {
-                    // Lưu file
-                    String fileName = fileService.handleSaveUploadFile(file, "tourism", "image");
-                    if (fileName != null && !fileName.isEmpty()) {
-                        TourismImage tourismImage = new TourismImage();
-                        // Đường dẫn để hiển thị qua HTTP (đã cấu hình trong WebConfig)
-                        tourismImage.setImagePath("/uploads/images/tourism/" + fileName);
-                        tourismImage.setTourism(existingTourism);
-                        tourismImageService.saveTourismImage(tourismImage);
+            // Lọc các file thực sự được upload (không rỗng)
+            List<MultipartFile> validFiles = imageLocation.stream()
+                    .filter(file -> file != null && !file.isEmpty())
+                    .toList();
+
+            if (!validFiles.isEmpty()) {
+                // Xóa ảnh cũ
+                List<TourismImage> images = tourismImageService.getImagesByTourismId(tourismId);
+                if (images != null && !images.isEmpty()) {
+                    tourismImageService.deleteImagesByTourismId(tourismId);
+                    for (TourismImage image : images) {
+                        String fullPath = image.getImagePath();
+                        String fileName = Paths.get(fullPath).getFileName().toString();
+                        fileService.handleDeleteImage(fileName, "tourism");
                     }
                 }
+                for (MultipartFile file : imageLocation) {
+                    if (!file.isEmpty()) {
+                        // Lưu file
+                        String fileName = fileService.handleSaveUploadFile(file, "tourism", "image");
+                        if (fileName != null && !fileName.isEmpty()) {
+                            TourismImage tourismImage = new TourismImage();
+                            // Đường dẫn để hiển thị qua HTTP (đã cấu hình trong WebConfig)
+                            tourismImage.setImagePath("/uploads/images/tourism/" + fileName);
+                            tourismImage.setTourism(existingTourism);
+                            tourismImageService.saveTourismImage(tourismImage);
+                        }
+                    }
+                }
+                tourismRepository.save(existingTourism);
             }
-            tourismRepository.save(existingTourism);
         }
-
         return "redirect:/admin/tourism-manage/view/" + tourismId + "?update-success";
+
     }
 
     @PostMapping("/add")
@@ -103,6 +112,7 @@ public class TourismController {
             @RequestParam String name,
             @RequestParam String description,
             @RequestParam String packages,
+            @RequestParam String timeline,
             @RequestParam double latitude,
             @RequestParam double longitude,
             @RequestParam double price,
@@ -114,6 +124,7 @@ public class TourismController {
         tourism.setLatitude(latitude);
         tourism.setLongitude(longitude);
         tourism.setPackages(packages);
+        tourism.setTimeline(timeline);
         tourism.setPrice(price);
         tourism = tourismRepository.save(tourism);
 
