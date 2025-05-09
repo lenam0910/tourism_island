@@ -24,6 +24,8 @@ public class Tourism {
     private Long id;
 
     private String name;
+    
+    @Column(length = 1000)
     private String description;
     private double latitude;
     private double longitude;
