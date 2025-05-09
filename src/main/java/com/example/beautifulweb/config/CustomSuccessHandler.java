@@ -18,14 +18,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Base64;
 
 @Component
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomSuccessHandler.class);
-
     @Autowired
     private UserService userService;
+
+    private final AppConfig appConfig = new AppConfig();
 
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
@@ -34,52 +35,78 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             Authentication authentication) throws IOException, ServletException {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            logger.warn("Session is null, cannot store user information.");
-            redirectStrategy.sendRedirect(request, response, "/?login-success");
-            return;
+            session = request.getSession(true);
         }
 
-        // Get username from Spring Security Authentication
         String username = authentication.getName();
-        logger.info("User '{}' logged in with authorities: {}", username, authentication.getAuthorities());
+        String plainPassword = (String) request.getSession().getAttribute("tempPlainPassword");
+        String password = request.getParameter("password");
 
-        // Get user from database
-        User user = userService.findByUsername(username);
-        if (user != null) {
-            // Store user information in session
-            session.setAttribute("userId", user.getId());
-            session.setAttribute("username", user.getUsername());
-            session.setAttribute("role", user.getRole());
-            logger.info("Stored in session - userId: {}, username: {}, role: {}", user.getId(), user.getUsername(),
-                    user.getRole());
-        } else {
-            logger.warn("User '{}' not found in database.", username);
-        }
-
-        // Check if "Remember Me" was selected and store preference in a cookie
-        String rememberMe = request.getParameter("remember-me");
-        if ("on".equals(rememberMe)) {
-            Cookie rememberMeCookie = new Cookie("rememberMePreference", "true");
-            rememberMeCookie.setMaxAge(30 * 24 * 60 * 60); // Cookie sống 30 ngày
+        // Xử lý cookie
+        if ("on".equals(request.getParameter("remember-me"))) {
+            // Lưu trạng thái "Remember Me" vào cookie
+            Cookie rememberMeCookie = new Cookie("rememberMe", "true");
+            rememberMeCookie.setMaxAge(30 * 24 * 60 * 60); // 30 ngày
             rememberMeCookie.setPath("/");
+            rememberMeCookie.setHttpOnly(true);
+            rememberMeCookie.setSecure(true);
             response.addCookie(rememberMeCookie);
+
+            // Lưu username vào cookie
+            Cookie usernameCookie = new Cookie("savedUsername", username);
+            usernameCookie.setMaxAge(30 * 24 * 60 * 60); // 30 ngày
+            usernameCookie.setPath("/");
+            usernameCookie.setHttpOnly(true);
+            usernameCookie.setSecure(true);
+            response.addCookie(usernameCookie);
+
+            // Lưu password vào cookie (mã hóa Base64)
+            User user = userService.findByUsername(username);
+            if (user != null && user.getPassword() != null) {
+                if (appConfig.passwordEncoder().matches(password, user.getPassword())) {
+                    Cookie passwordCookie = new Cookie("savedPassword", password);
+                    passwordCookie.setMaxAge(30 * 24 * 60 * 60);
+                    passwordCookie.setPath("/");
+                    passwordCookie.setHttpOnly(true);
+                    passwordCookie.setSecure(true);
+                    response.addCookie(passwordCookie);
+                }
+
+            }
         } else {
-            // If "Remember Me" is not selected, remove the preference cookie
-            Cookie rememberMeCookie = new Cookie("rememberMePreference", null);
+            // Xóa các cookie nếu không chọn "Remember Me"
+            Cookie rememberMeCookie = new Cookie("rememberMe", "");
             rememberMeCookie.setMaxAge(0); // Xóa cookie
             rememberMeCookie.setPath("/");
             response.addCookie(rememberMeCookie);
+
+            Cookie usernameCookie = new Cookie("savedUsername", "");
+            usernameCookie.setMaxAge(0); // Xóa cookie
+            usernameCookie.setPath("/");
+            response.addCookie(usernameCookie);
+
+            Cookie passwordCookie = new Cookie("savedPassword", "");
+            passwordCookie.setMaxAge(0); // Xóa cookie
+            passwordCookie.setPath("/");
+            response.addCookie(passwordCookie);
         }
 
-        // Clear authentication attributes
+        User user = userService.findByUsername(username);
+        if (user != null) {
+            session.setAttribute("userId", user.getId());
+            session.setAttribute("username", user.getUsername());
+            session.setAttribute("role", user.getRole());
+
+        } else {
+        }
+
         clearAuthenticationAttributes(session);
 
-        // Redirect based on role
         String targetUrl;
         if (user != null && "ADMIN".equals(user.getRole())) {
-            targetUrl = "/admin/map?login-success"; // Chuyển hướng đến /dashboard cho admin
+            targetUrl = "/admin/map?login-success";
         } else {
-            targetUrl = "/?login-success"; // User thường về trang chủ
+            targetUrl = "/?login-success";
         }
 
         if (!response.isCommitted()) {

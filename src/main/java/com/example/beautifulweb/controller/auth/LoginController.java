@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import com.example.beautifulweb.model.User;
 import com.example.beautifulweb.service.UserService;
 
 import jakarta.servlet.http.Cookie;
@@ -20,21 +17,32 @@ public class LoginController {
     private UserService userService;
 
     @GetMapping("/login")
-    public String login(HttpServletRequest request, Model model) {
+    public String loginPage(Model model, HttpServletRequest request) {
+        String savedUsername = null;
+        String savedPassword = null;
+        String rememberMe = null;
 
-        // Check for rememberMePreference cookie
-        boolean rememberMe = false;
+        // Đọc cookie từ request
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("rememberMePreference".equals(cookie.getName()) && "true".equals(cookie.getValue())) {
-                    rememberMe = true;
-                    break;
+                if ("savedUsername".equals(cookie.getName())) {
+                    savedUsername = cookie.getValue();
+                }
+                if ("savedPassword".equals(cookie.getName())) {
+                    savedPassword = cookie.getValue();
+                }
+                if ("rememberMe".equals(cookie.getName())) {
+                    rememberMe = cookie.getValue();
                 }
             }
         }
 
+        // Thêm giá trị vào model
+        model.addAttribute("savedUsername", savedUsername);
+        model.addAttribute("savedPassword", savedPassword);
         model.addAttribute("rememberMe", rememberMe);
+
         return "login";
     }
 
@@ -47,5 +55,4 @@ public class LoginController {
     public String accessDenied() {
         return "access-denied";
     }
-
 }

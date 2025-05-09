@@ -48,12 +48,7 @@ public class SecurityConfig {
 						.logoutSuccessUrl("/login?logout")
 						.invalidateHttpSession(true)
 						.deleteCookies("JSESSIONID") // Xóa cookie remember-me khi đăng xuất
-						.permitAll())
-				.rememberMe(rememberMe -> rememberMe // Kích hoạt Remember Me
-						.key("uniqueAndSecretKey") // Khóa để mã hóa token
-						.tokenValiditySeconds(86400) // Thời gian sống của cookie: 1 ngày (86400 giây)
-						.userDetailsService(userService))
-				.userDetailsService(userService);
+						.permitAll());
 
 		return http.build();
 	}
