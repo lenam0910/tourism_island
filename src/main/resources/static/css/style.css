@@ -258,6 +258,7 @@ a #modoal-map-link {
 .service-item {
     box-shadow: 0 0 45px rgba(0, 0, 0, .08);
     transition: .5s;
+    height: 400px;
 }
 
 .service-item:hover {

@@ -1,10 +1,13 @@
 package com.example.beautifulweb.config;
 
+import javax.swing.Spring;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
@@ -27,6 +30,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public SpringTemplateEngine templateEngine() {
 		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(templateResolver());
+		templateEngine.setEnableSpringELCompiler(true);
+		templateEngine.addDialect(new SpringSecurityDialect()); // Add Spring Security dialect if needed
 		return templateEngine;
 	}
 

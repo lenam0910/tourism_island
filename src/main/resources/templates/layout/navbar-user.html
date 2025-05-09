@@ -16,6 +16,9 @@
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
+                        <div sec:authorize="hasRole('ROLE_ADMIN')">
+                            <a th:href="@{/admin/map}" class="dropdown-item">Admin Pages</a>
+                        </div>
                         <a href="destination.html" class="dropdown-item">Destination</a>
                         <a href="booking.html" class="dropdown-item">Booking</a>
                         <a href="team.html" class="dropdown-item">Travel Guides</a>
