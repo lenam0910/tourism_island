@@ -89,9 +89,17 @@
                             <textarea class="form-control" id="tourismDescription" rows="3"
                                 th:field="*{description}"></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="tourismPackages" class="form-label">Packages</label>
-                            <textarea class="form-control" id="packages" rows="3" th:field="*{packages}"></textarea>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="tourismPackages" class="form-label">Packages</label>
+                                <textarea class="form-control" id="tinymce-editor" rows="3"
+                                    th:field="*{packages}"></textarea>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="tourismTimelineTimeline" class="form-label">Timeline</label>
+                                <textarea class="form-control" id="tinymce-editor" rows="3"
+                                    th:field="*{timeline}"></textarea>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="imageLocation" class="form-label">Image of Service:</label>

@@ -164,8 +164,9 @@
 
 
     <!-- Modal nhập dịch vụ -->
+    <!-- Modal nhập dịch vụ -->
     <div class="modal fade" id="serviceModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg"> <!-- tăng kích thước modal -->
             <form id="serviceForm" class="modal-content" method="post" th:action="@{/add}"
                 enctype="multipart/form-data">
                 <div class="modal-header">
@@ -175,29 +176,41 @@
                 <div class="modal-body">
                     <input type="hidden" name="latitude" id="lat">
                     <input type="hidden" name="longitude" id="lng">
+
                     <div class="mb-3">
                         <label>Name</label>
                         <input type="text" id="name" name="name" class="form-control" required>
                     </div>
+
                     <div class="mb-3">
                         <label>Description</label>
                         <textarea id="description" name="description" class="form-control" required></textarea>
                     </div>
+
                     <div class="mb-3">
                         <label>Price</label>
-                        <input type="number" id="price" name="price" class="form-control" required></input>
+                        <input type="number" id="price" name="price" class="form-control" required>
                     </div>
-                    <div class="mb-3">
-                        <label>Packages Detail</label>
-                        <textarea id="packages" name="packages" class="form-control"></textarea>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Packages Detail</label>
+                            <textarea id="tinymce-editor" name="packages" class="form-control tinymce-editor"></textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Timeline</label>
+                            <textarea id="tinymce-editor" name="timeline" class="form-control tinymce-editor"></textarea>
+                        </div>
                     </div>
+
                     <div class="mb-3">
-                        <label for="imageLocation" class="form-label">Image of location:</label>
+                        <label for="imageLocation" class="form-label">Image of Service:</label>
                         <input class="form-control" type="file" id="imageLocation" accept=".png, .jpg, .jpeg"
                             name="imageLocation" multiple />
                         <div id="imagePreview" class="mt-2"></div>
                     </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -205,6 +218,7 @@
             </form>
         </div>
     </div>
+
 
     <!--Map Js-->
     <script>

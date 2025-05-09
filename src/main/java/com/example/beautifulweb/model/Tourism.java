@@ -32,6 +32,9 @@ public class Tourism {
     @Column(columnDefinition = "TEXT")
     private String packages;
 
+    @Column(columnDefinition = "TEXT")
+    private String timeline;
+
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "tourism")
     @JsonIgnore
