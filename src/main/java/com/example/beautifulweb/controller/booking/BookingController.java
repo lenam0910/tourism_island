@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.beautifulweb.model.TourBooking;
 import com.example.beautifulweb.repository.TourBookingRepository;
 import com.example.beautifulweb.service.EmailService;
+import com.example.beautifulweb.service.TourismService;
 
 import jakarta.validation.Valid;
 
@@ -26,8 +27,10 @@ public class BookingController {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a");
     private final EmailService emailService;
+    private final TourismService tourismService;
 
-    public BookingController(EmailService emailService) {
+    public BookingController(EmailService emailService, TourismService tourismService) {
+        this.tourismService = tourismService;
         this.emailService = emailService;
     }
 
@@ -39,10 +42,13 @@ public class BookingController {
             @Valid @ModelAttribute("tourBooking") TourBooking tourBooking,
             BindingResult result,
             Model model) {
+        List<String> destinations = tourismService.getAllDestinations();
 
         if (result.hasErrors()) {
             model.addAttribute("tourBooking", tourBooking);
-            return "index";
+            model.addAttribute("destinations", destinations);
+
+            return "redirect:/home?booking-fail";
         }
 
         try {
@@ -57,11 +63,12 @@ public class BookingController {
             tourBooking.setConfirmed(false);
             tourBookingRepository.save(tourBooking);
             model.addAttribute("message", "Your tour has been booked! Please wait for admin confirmation.");
-            return "redirect:/?success-booking";
+            return "redirect:/home?success-booking";
         } catch (Exception e) {
-            model.addAttribute("error", "Failed to book tour: " + e.getMessage());
             model.addAttribute("tourBooking", tourBooking);
-            return "index";
+            model.addAttribute("destinations", destinations);
+
+            return "redirect:/home?booking-fail";
         }
     }
 

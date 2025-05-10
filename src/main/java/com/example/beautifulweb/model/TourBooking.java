@@ -28,7 +28,7 @@ public class TourBooking {
 
     @NotNull(message = "Date and time are required")
     @Column(columnDefinition = "DATETIME")
-    @DateTimeFormat(pattern = "MM/dd/yyyy h:mm a") // Định dạng khớp với "05/08/2025 1:18 PM"
+    @DateTimeFormat(pattern = "MM/dd/yyyy h:mm a")
     private LocalDateTime datetime;
 
     @NotBlank(message = "Destination is required")

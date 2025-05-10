@@ -201,6 +201,9 @@
     case "add-account-fail":
       toastr.error("Failed to add account", "Error");
       break;
+    case "booking-fail":
+      toastr.error("Booking package tour fail", "Error");
+      break;
     case "deactivate-success":
       toastr.success("Account deactivation successful", "Success");
       break;

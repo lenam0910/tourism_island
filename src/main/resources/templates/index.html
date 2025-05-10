@@ -390,8 +390,8 @@
                 <h1 class="mb-5">Awesome Tourism</h1>
             </div>
             <div class="row g-4 justify-content-center">
-                <div th:each="tourism, iterStat : ${tourisms}" class="col-lg-4 col-md-6 wow fadeInUp" 
-                th:attr="data-wow-delay=${#numbers.formatDecimal(iterStat.index * 0.2 + 0.1, 1, 1)} + 's'">
+                <div th:each="tourism, iterStat : ${tourisms}" class="col-lg-4 col-md-6 wow fadeInUp"
+                    th:attr="data-wow-delay=${#numbers.formatDecimal(iterStat.index * 0.2 + 0.1, 1, 1)} + 's'">
                     <div class="package-item">
                         <div class="overflow-hidden">
                             <img class="img-fluid tourism-image" src="img/package-1.jpg" alt=""
@@ -939,7 +939,12 @@
                             .setLngLat([service.longitude, service.latitude])
                             .addTo(map);
 
-                        marker.getElement().addEventListener('click', () => {
+                        // Thêm sự kiện nhấp chuột cho marker
+                        marker.getElement().addEventListener('click', (e) => {
+                            // Ngăn sự kiện lan tỏa đến bản đồ
+                            e.stopPropagation();
+
+                            // Hiển thị modal chi tiết
                             document.getElementById("modal-title").innerText = service.name;
                             document.getElementById("modal-description").innerText = service.description || 'No description available';
                             document.getElementById("modal-map-link").href = `https://www.google.com/maps?q=${service.latitude},${service.longitude}`;
@@ -972,6 +977,12 @@
                     });
                 });
         }
+
+        // Sự kiện nhấp chuột vào bản đồ
+        map.on('click', (e) => {
+            const lngLat = e.lngLat;
+            placeSearchMarker([lngLat.lng, lngLat.lat]);
+        });
 
         function fetchNearbyServices(lat, lng, radius) {
             const container = document.getElementById("nearby-services");
