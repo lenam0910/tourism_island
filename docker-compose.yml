@@ -5,7 +5,7 @@ services:
       - "8080:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/tourism?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=tourism_user
+      - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=tourism_pass
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_LOG_LEVEL=DEBUG
@@ -22,7 +22,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root_pass
       - MYSQL_DATABASE=tourism
-      - MYSQL_USER=tourism_user
+      - MYSQL_USER=root
       - MYSQL_PASSWORD=tourism_pass
     volumes:
       - db-data:/var/lib/mysql
