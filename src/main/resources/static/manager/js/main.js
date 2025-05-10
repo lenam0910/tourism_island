@@ -207,6 +207,12 @@
     case "deactivate-success":
       toastr.success("Account deactivation successful", "Success");
       break;
+    case "subscribe_fail":
+      toastr.error("Sign up guide fail", "Error");
+      break;
+    case "subscribe_success":
+      toastr.success("Sign up guide successful", "Success");
+      break;
     case "activate-success":
       toastr.success("Account activation successful", "Success");
       break;

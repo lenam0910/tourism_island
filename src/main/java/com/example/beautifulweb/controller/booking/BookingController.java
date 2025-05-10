@@ -21,6 +21,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.Flow.Subscriber;
 
 @Controller
 public class BookingController {
@@ -83,5 +84,19 @@ public class BookingController {
 
         model.addAttribute("message", "Tour booking confirmed successfully!");
         return "redirect:/admin/bookings?confirm_booking";
+    }
+
+    @PostMapping("/subscribe")
+    public String subscribe(@RequestParam String email, Model model) {
+        try {
+
+            emailService.sendNewsletterConfirmationEmail(email);
+
+            return "redirect:/home?subscribe_success";
+        } catch (Exception e) {
+            model.addAttribute("message", "Error processing subscription. Please try again.");
+            model.addAttribute("messageType", "danger");
+            return "redirect:/home?subscribe_fail";
+        }
     }
 }
