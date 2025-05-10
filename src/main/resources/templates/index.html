@@ -44,7 +44,11 @@
     <!--update api key in application.properties-->
     <script async defer
         th:src="'https://maps.gomaps.pro/maps/api/js?key=' + ${MAPS_API_KEY} + '&libraries=places&callback=initMap'"></script>
+    <!-- Mapbox GL JS CSS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
 
+    <!-- Mapbox GL JS -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <style>
         #map {
             width: 100%;
@@ -824,304 +828,184 @@
     <script src="/js/main.js"></script>
     <script th:src="@{/manager/js/main.js}"></script>
     <script>
+        mapboxgl.accessToken = "[[${MAPS_API_KEY}]]";
+
         let map;
         let allMarkers = [];
         let searchMarker;
         let searchCircle;
-        const searchRadius = 1000; // Bán kính 1km
+        const searchRadius = 1000;
         let destinationModal;
         let nearbyModal;
 
         function initMap() {
-            console.log('Starting map initialization');
-            try {
-                map = new google.maps.Map(document.getElementById("map"), {
-                    center: { lat: 8.6955, lng: 106.6018 }, // Côn Đảo
-                    zoom: 13,
-                    mapTypeId: google.maps.MapTypeId.SATELLITE,
-                    disableDefaultUI: true,
-                    styles: [
-                        { featureType: "poi", stylers: [{ visibility: "off" }] },
-                        { featureType: "transit", stylers: [{ visibility: "off" }] }
-                    ]
-                });
-                console.log('Map initialized successfully');
-            } catch (error) {
-                console.error('Error initializing map:', error);
-                toastr.error('Failed to initialize map');
-                return;
-            }
+            map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/satellite-v9',
+                center: [106.6018, 8.6955],
+                zoom: 13
+            });
 
-            // Khởi tạo modal
-            try {
+            map.on('load', () => {
                 destinationModal = new bootstrap.Modal(document.getElementById('destinationModal'));
                 nearbyModal = new bootstrap.Modal(document.getElementById('nearbyModal'));
-                console.log('Modals initialized successfully');
-            } catch (error) {
-                console.error('Error initializing modals:', error);
-                toastr.error('Failed to initialize modals');
-                return;
-            }
+                loadMarkers();
 
-            // Nhấp chuột để đặt marker tìm kiếm
-            try {
-                google.maps.event.addListener(map, "click", (e) => {
-                    console.log('Map clicked at lat:', e.latLng.lat(), 'lng:', e.latLng.lng());
-                    placeSearchMarker(e.latLng);
+                map.on('click', (e) => {
+                    const lngLat = e.lngLat;
+                    placeSearchMarker([lngLat.lng, lngLat.lat]);
                 });
-                console.log('Map click listener added');
-            } catch (error) {
-                console.error('Error adding map click listener:', error);
-                toastr.error('Failed to add map click listener');
-            }
-
-            loadMarkers();
+            });
         }
 
-        function placeSearchMarker(latLng) {
-            console.log('Placing search marker at lat:', latLng.lat(), 'lng:', latLng.lng());
-            // Xóa marker và vòng tròn cũ nếu có
-            if (searchMarker) {
-                searchMarker.setMap(null);
-                console.log('Removed old search marker');
-            }
-            if (searchCircle) {
-                searchCircle.setMap(null);
-                console.log('Removed old search circle');
+        function placeSearchMarker(lngLat) {
+            if (searchMarker) searchMarker.remove();
+            if (map.getSource('search-circle')) {
+                map.removeLayer('search-circle-layer');
+                map.removeSource('search-circle');
             }
 
-            // Tạo marker mới
-            try {
-                searchMarker = new google.maps.Marker({
-                    position: latLng,
-                    map: map,
-                    title: "Search Nearby Services",
-                    draggable: true,
-                    icon: {
-                        path: "M10.5 0C4.7 0 0 4.7 0 10.5c0 7.5 10.5 21 10.5 21s10.5- dólares 21C21 4.7 16.3 0 10.5 0z",
-                        fillColor: "#1a73e8",
-                        fillOpacity: 1,
-                        strokeColor: "#ffffff",
-                        strokeWeight: 2,
-                        scale: 1.5,
-                        anchor: new google.maps.Point(10.5, 31)
-                    }
-                });
-                console.log('Search marker created');
+            searchMarker = new mapboxgl.Marker({ draggable: true })
+                .setLngLat(lngLat)
+                .addTo(map);
 
-                // Vẽ vòng tròn bán kính 1km
-                searchCircle = new google.maps.Circle({
-                    map: map,
-                    center: latLng,
-                    radius: searchRadius,
-                    strokeColor: "#1a73e8",
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    fillColor: "#1a73e8",
-                    fillOpacity: 0.2
-                });
-                console.log('Search circle created');
+            drawSearchCircle(lngLat);
 
-                // Sự kiện nhấp vào marker tìm kiếm
-                google.maps.event.addListener(searchMarker, "click", (e) => {
-                    const lat = searchMarker.getPosition().lat();
-                    const lng = searchMarker.getPosition().lng();
-                    console.log('Search marker clicked at lat:', lat, 'lng:', lng);
-                    fetchNearbyServices(lat, lng, searchRadius);
-                });
-                console.log('Click listener added to search marker');
+            searchMarker.on('dragend', () => {
+                const newPos = searchMarker.getLngLat();
+                drawSearchCircle([newPos.lng, newPos.lat]);
+                fetchNearbyServices(newPos.lat, newPos.lng, searchRadius);
+            });
 
-                // Sự kiện kéo thả marker
-                google.maps.event.addListener(searchMarker, "dragend", (e) => {
-                    const lat = searchMarker.getPosition().lat();
-                    const lng = searchMarker.getPosition().lng();
-                    console.log('Search marker dragged to lat:', lat, 'lng:', lng);
-                    searchCircle.setCenter(searchMarker.getPosition());
-                    fetchNearbyServices(lat, lng, searchRadius);
-                });
-                console.log('Dragend listener added to search marker');
+            fetchNearbyServices(lngLat[1], lngLat[0], searchRadius);
+        }
 
-                // Tự động tìm kiếm dịch vụ lân cận khi đặt marker
-                const lat = latLng.lat();
-                const lng = latLng.lng();
-                console.log('Fetching nearby services after placing marker');
-                fetchNearbyServices(lat, lng, searchRadius);
-            } catch (error) {
-                console.error('Error creating search marker or circle:', error);
-                toastr.error('Failed to create search marker');
+        function drawSearchCircle([lng, lat]) {
+            const circleData = createGeoJSONCircle([lng, lat], searchRadius);
+
+            map.addSource('search-circle', {
+                type: 'geojson',
+                data: circleData
+            });
+
+            map.addLayer({
+                id: 'search-circle-layer',
+                type: 'fill',
+                source: 'search-circle',
+                paint: {
+                    'fill-color': '#1a73e8',
+                    'fill-opacity': 0.2
+                }
+            });
+        }
+
+        function createGeoJSONCircle(center, radiusInMeters, points = 64) {
+            const coords = { latitude: center[1], longitude: center[0] };
+            const km = radiusInMeters / 1000;
+            const ret = [];
+            const distanceX = km / (111.320 * Math.cos(coords.latitude * Math.PI / 180));
+            const distanceY = km / 110.574;
+
+            for (let i = 0; i < points; i++) {
+                const theta = (i / points) * (2 * Math.PI);
+                const x = distanceX * Math.cos(theta);
+                const y = distanceY * Math.sin(theta);
+                ret.push([coords.longitude + x, coords.latitude + y]);
             }
+            ret.push(ret[0]);
+            return {
+                type: 'Feature',
+                geometry: {
+                    type: 'Polygon',
+                    coordinates: [ret]
+                }
+            };
         }
 
         function loadMarkers() {
-            console.log('Loading all markers');
-            allMarkers.forEach(m => m.setMap(null));
+            allMarkers.forEach(m => m.remove());
             allMarkers = [];
 
             fetch("/api/tourism/all")
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error(`Failed to load destinations: ${res.status}`);
-                    }
-                    return res.json();
-                })
+                .then(res => res.json())
                 .then(data => {
-                    console.log('Loaded destinations:', data);
-                    if (!data || !Array.isArray(data)) {
-                        throw new Error('Invalid data format from API');
-                    }
-
                     data.forEach(service => {
-                        if (!service.latitude || !service.longitude || !service.name) {
-                            console.warn('Skipping invalid service:', service);
-                            return;
-                        }
+                        if (!service.latitude || !service.longitude || !service.name) return;
 
-                        const position = { lat: service.latitude, lng: service.longitude };
-                        const marker = new google.maps.Marker({
-                            position: position,
-                            map: map,
-                            title: service.name,
-                            label: {
-                                text: service.name,
-                                color: "#FFFFFF",
-                                fontSize: "14px",
-                                fontWeight: "bold"
-                            }
-                        });
+                        const marker = new mapboxgl.Marker()
+                            .setLngLat([service.longitude, service.latitude])
+                            .addTo(map);
 
-                        google.maps.event.addListener(marker, "click", (e) => {
-                            console.log('Destination marker clicked:', service.name);
-
-                            // Cập nhật nội dung modal
-                            document.getElementById("modal-title").innerText = service.name || 'Unknown';
+                        marker.getElement().addEventListener('click', () => {
+                            document.getElementById("modal-title").innerText = service.name;
                             document.getElementById("modal-description").innerText = service.description || 'No description available';
-                            const mapLink = document.getElementById("modal-map-link");
-                            mapLink.href = `https://www.google.com/maps?q=${service.latitude},${service.longitude}`;
+                            document.getElementById("modal-map-link").href = `https://www.google.com/maps?q=${service.latitude},${service.longitude}`;
 
-                            // Tải hình ảnh
                             const imageContainer = document.getElementById("modal-images");
                             imageContainer.innerHTML = 'Loading images...';
+
                             fetch(`/api/tourism/images/${service.id}`)
-                                .then(res => {
-                                    if (!res.ok) {
-                                        throw new Error(`Failed to load images: ${res.status}`);
-                                    }
-                                    return res.json();
-                                })
+                                .then(res => res.json())
                                 .then(images => {
                                     imageContainer.innerHTML = '';
-                                    if (images && images.length > 0) {
+                                    if (images.length > 0) {
                                         images.forEach(img => {
                                             const imgElement = document.createElement('img');
                                             imgElement.src = img.imagePath;
                                             imgElement.className = 'preview-image';
-                                            imgElement.alt = 'Destination image';
                                             imageContainer.appendChild(imgElement);
                                         });
                                     } else {
                                         imageContainer.innerText = 'No images available';
                                     }
-                                })
-                                .catch(error => {
-                                    console.error('Error loading images:', error);
+                                }).catch(() => {
                                     imageContainer.innerText = 'Error loading images';
-                                    toastr.error('Failed to load images');
                                 });
 
-                            // Hiển thị modal
-                            try {
-                                destinationModal.show();
-                                console.log('Destination modal shown for:', service.name);
-                                resizeMap();
-                            } catch (error) {
-                                console.error('Error showing modal:', error);
-                                toastr.error('Failed to show destination details');
-                            }
+                            destinationModal.show();
                         });
 
                         allMarkers.push(marker);
                     });
-                })
-                .catch(error => {
-                    console.error('Error loading markers:', error);
-                    toastr.error('Failed to load destinations');
                 });
         }
 
         function fetchNearbyServices(lat, lng, radius) {
-            console.log('Fetching nearby services for lat:', lat, 'lng:', lng, 'radius:', radius);
             const container = document.getElementById("nearby-services");
-            if (!container) {
-                console.error('Nearby services container not found');
-                toastr.error('UI error: Nearby services container missing');
-                return;
-            }
+            if (!container) return;
             container.innerHTML = 'Loading nearby services...';
 
             fetch(`/api/tourism/nearby?lat=${lat}&lng=${lng}&radius=${radius}`)
-                .then(res => {
-                    console.log('Response status for nearby services:', res.status);
-                    if (!res.ok) {
-                        throw new Error(`Failed to load nearby services: ${res.status}`);
-                    }
-                    return res.json();
-                })
+                .then(res => res.json())
                 .then(services => {
-                    console.log('Nearby services received:', services);
                     container.innerHTML = '';
                     if (services && services.length > 0) {
                         services.forEach(service => {
                             const serviceDiv = document.createElement('div');
                             serviceDiv.className = 'service-item';
                             serviceDiv.innerHTML = `
-                                <h6>${service.name || 'Unknown'}</h6>
-                                <p>${service.description || 'No description'}</p>
-                                <a href="https://www.google.com/maps?q=${service.latitude},${service.longitude}" target="_blank" class="btn btn-outline-primary btn-sm">View on Google Maps</a>
-                            `;
+                            <h6>${service.name || 'Unknown'}</h6>
+                            <p>${service.description || 'No description'}</p>
+                            <a href="https://www.google.com/maps?q=${service.latitude},${service.longitude}" target="_blank" class="btn btn-outline-primary btn-sm">View on Google Maps</a>
+                        `;
                             container.appendChild(serviceDiv);
                         });
                     } else {
-                        console.log('No nearby services found');
                         container.innerText = 'No services found within 1km radius.';
                     }
-                    try {
-                        nearbyModal.show();
-                        console.log('Nearby modal shown');
-                        resizeMap();
-                    } catch (error) {
-                        console.error('Error showing nearby modal:', error);
-                        toastr.error('Failed to show nearby services');
-                    }
+                    nearbyModal.show();
                 })
-                .catch(error => {
-                    console.error('Error loading nearby services:', error);
+                .catch(() => {
                     container.innerHTML = 'Error loading nearby services';
-                    toastr.error('Failed to load nearby services');
-                    try {
-                        nearbyModal.show();
-                        console.log('Nearby modal shown despite error');
-                        resizeMap();
-                    } catch (modalError) {
-                        console.error('Error showing nearby modal:', modalError);
-                    }
+                    nearbyModal.show();
                 });
         }
 
-        function resizeMap() {
-            try {
-                google.maps.event.trigger(map, "resize");
-                console.log('Map resized');
-            } catch (error) {
-                console.error('Error resizing map:', error);
-            }
-        }
-
         window.addEventListener('load', () => {
-            console.log('Window loaded, calling initMap');
             initMap();
         });
-        window.initMap = initMap;
     </script>
+
 </body>
 
 </html>
