@@ -83,8 +83,23 @@ body {
     gap: 40px;
 }
 
+/* Image Row */
+.image-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 25px;
+}
+
+.image-row img {
+    height: 95px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 .schedule-box {
     flex: 1;
+    max-width: 717px;
     min-width: 300px;
     background: white;
     border: 2px solid #cde4df;
@@ -97,15 +112,6 @@ body {
     margin-bottom: 20px;
 }
 
-.schedule-item {
-    margin-bottom: 18px;
-}
-
-.schedule-item strong {
-    display: inline-block;
-    width: 100px;
-    color: #008080;
-}
 
 .includes-box {
     flex: 1;
@@ -145,6 +151,7 @@ body {
 }
 
 .includes-list li {
+    list-style: none;
     margin-bottom: 12px;
     font-size: 15px;
 }
@@ -157,7 +164,7 @@ body {
 
 .price-tag {
     position: absolute;
-    bottom: 30px;
+    bottom: 100px;
     right: 30px;
     background-color: #007575;
     color: white;
@@ -166,6 +173,22 @@ body {
     font-weight: bold;
     font-size: 18px;
     text-align: center;
+}
+
+.booking-button {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background-color: #007575;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+.booking-button a {
+    color: white;
+    text-decoration: none;
 }
 
 .price-tag small {

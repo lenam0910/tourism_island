@@ -1,12 +1,28 @@
 package com.example.beautifulweb.controller.navigation;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import ch.qos.logback.core.model.Model;
+import com.example.beautifulweb.model.Tourism;
+import com.example.beautifulweb.model.TourismImage;
+import com.example.beautifulweb.service.TourismService;
+import com.example.beautifulweb.service.ToursimImageService;
+
+import org.springframework.ui.Model;
 
 @Controller
 public class navigationController {
+
+    private final TourismService tourismService;
+    private final ToursimImageService toursimImageService;
+
+    public navigationController(TourismService tourismService, ToursimImageService toursimImageService) {
+        this.toursimImageService = toursimImageService;
+        this.tourismService = tourismService;
+    }
     
     // This class is used to handle navigation between pages in the web application.
     // It contains methods that map to different URLs and return the corresponding
@@ -34,9 +50,18 @@ public class navigationController {
         return "map"; // Returns the map.html template
     }
 
+    @GetMapping("/tourism-details/{tourismId}")
+    public String tourDetailWtihId(@PathVariable("tourismId") Long tourismId, Model model) {
+        Tourism tourism = tourismService.getById(tourismId);
+        List<TourismImage> tourismImages = toursimImageService.getImagesByTourismId(tourismId);
+        model.addAttribute("tourism", tourism);
+        model.addAttribute("images", tourismImages);
+        return "tour-user-detail"; 
+    }
+
     @GetMapping("/tour-details")
     public String tourDetails(Model model) {
 
-        return "tour-user-detail"; // Returns the tour-details.html template
+        return "tour-user-detail"; 
     }
 }
