@@ -1,6 +1,6 @@
 services:
   app:
-    image: tourismisland:latest
+    image: lenam0910/tourismisland:latest
     ports:
       - "8080:8080"
     environment:
