@@ -13,7 +13,7 @@
                 <!-- <a th:href="@{/about}" class="nav-item nav-link">About</a> 
                 <a th:href="@{/services}" class="nav-item nav-link">Services</a>
                 <a th:href="@{/package}" class="nav-item nav-link">Packages</a> -->
-                <div class="nav-item dropdown">
+                <div class="nav-item dropdown" th:if="${session.role != 'USER'}">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
                         <div sec:authorize="hasRole('ROLE_ADMIN')">
