@@ -8,16 +8,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.beautifulweb.model.TourBooking;
 import com.example.beautifulweb.model.Tourism;
 import com.example.beautifulweb.model.TourismImage;
+import com.example.beautifulweb.model.User;
 import com.example.beautifulweb.repository.TourismRepository;
+import com.example.beautifulweb.service.EmailService;
 import com.example.beautifulweb.service.FileService;
 import com.example.beautifulweb.service.TourismService;
 import com.example.beautifulweb.service.ToursimImageService;
+import com.example.beautifulweb.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 @Controller
 public class TourismController {
@@ -25,13 +35,36 @@ public class TourismController {
     private final FileService fileService;
     private final ToursimImageService tourismImageService;
     private final TourismService tourismService;
+    private final EmailService emailService;
+    private final UserService userService;
 
     public TourismController(TourismRepository tourismRepository, FileService fileService,
-            ToursimImageService tourismImageService, TourismService tourismService) {
+            ToursimImageService tourismImageService, TourismService tourismService, EmailService emailService,
+            UserService userService) {
+        this.userService = userService;
+        this.emailService = emailService;
         this.tourismService = tourismService;
         this.tourismImageService = tourismImageService;
         this.fileService = fileService;
         this.tourismRepository = tourismRepository;
+    }
+
+    @GetMapping("/book-tour")
+    public String bookTour(@Valid @ModelAttribute("tourBooking") TourBooking tourBooking,
+            BindingResult result, HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        if (result.hasErrors()) {
+            // Nếu có lỗi validate, trả lại trang với form và lỗi
+            model.addAttribute("tourBooking", new TourBooking());
+
+            return "tour-user-detail"; // Trả lại template để hiển thị lỗi
+        }
+        User user = userService.getUserById((Long) session.getAttribute("userId"));
+        if (user == null) {
+            return "redirect:/login";
+        }
+        emailService.sendBookingConfirmationEmail(null, null, null, null);
+        return "redirect:/tourism-details" + "?success-booking";
     }
 
     @GetMapping("admin/tourism-manage/view/{tourismId}")

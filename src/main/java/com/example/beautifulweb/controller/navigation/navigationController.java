@@ -6,10 +6,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.example.beautifulweb.model.TourBooking;
 import com.example.beautifulweb.model.Tourism;
 import com.example.beautifulweb.model.TourismImage;
+import com.example.beautifulweb.model.User;
 import com.example.beautifulweb.service.TourismService;
 import com.example.beautifulweb.service.ToursimImageService;
+import com.example.beautifulweb.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 
@@ -18,12 +23,15 @@ public class navigationController {
 
     private final TourismService tourismService;
     private final ToursimImageService toursimImageService;
+    private final UserService userService;
 
-    public navigationController(TourismService tourismService, ToursimImageService toursimImageService) {
+    public navigationController(TourismService tourismService, ToursimImageService toursimImageService,
+            UserService userService) {
+        this.userService = userService;
         this.toursimImageService = toursimImageService;
         this.tourismService = tourismService;
     }
-    
+
     // This class is used to handle navigation between pages in the web application.
     // It contains methods that map to different URLs and return the corresponding
     // HTML templates.
@@ -51,17 +59,49 @@ public class navigationController {
     }
 
     @GetMapping("/tourism-details/{tourismId}")
-    public String tourDetailWtihId(@PathVariable("tourismId") Long tourismId, Model model) {
+    public String tourDetailWtihId(@PathVariable("tourismId") Long tourismId, HttpSession session, Model model) {
+        // Lấy thông tin tourism
         Tourism tourism = tourismService.getById(tourismId);
-        List<TourismImage> tourismImages = toursimImageService.getImagesByTourismId(tourismId);
         model.addAttribute("tourism", tourism);
+
+        // Lấy danh sách destinations
+        List<String> destinations = tourismService.getAllDestinations();
+        model.addAttribute("destinations", destinations);
+
+        // Tạo tourBooking và điền thông tin người dùng
+        TourBooking tourBooking = new TourBooking();
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                tourBooking.setName(user.getFullName());
+                tourBooking.setEmail(user.getEmail());
+            }
+        }
+
+        String tourismName = tourism.getName();
+        if (tourismName != null) {
+            for (String dest : destinations) {
+                if (dest.equalsIgnoreCase(tourismName)) {
+                    tourBooking.setDestination(dest);
+                    break;
+                }
+            }
+        }
+
+        tourBooking.setId(tourismId);
+        model.addAttribute("tourBooking", tourBooking);
+
+        // Lấy danh sách images
+        List<TourismImage> tourismImages = toursimImageService.getImagesByTourismId(tourismId);
         model.addAttribute("images", tourismImages);
-        return "tour-user-detail"; 
+
+        return "tour-user-detail";
     }
 
     @GetMapping("/tour-details")
     public String tourDetails(Model model) {
 
-        return "tour-user-detail"; 
+        return "tour-user-detail";
     }
 }
