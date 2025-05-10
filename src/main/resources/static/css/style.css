@@ -13,10 +13,26 @@
 .fa {
     color: #17a3b8 !important;
 }
-.fa-globe, .fa-dollar-sign, .fa-plane, .fa-user, .fa-users, .fa-calendar-alt, .fa-clock, .fa-map-marker-alt, .fa-star
-, .fa-facebook-f, .fa-twitter, .fa-instagram, .fa-linkedin-in, .fa-pinterest-p, .fa-youtube, .fa-whatsapp{
-    color:#FFFFFF !important;
+
+.fa-globe,
+.fa-dollar-sign,
+.fa-plane,
+.fa-user,
+.fa-users,
+.fa-calendar-alt,
+.fa-clock,
+.fa-map-marker-alt,
+.fa-star,
+.fa-facebook-f,
+.fa-twitter,
+.fa-instagram,
+.fa-linkedin-in,
+.fa-pinterest-p,
+.fa-youtube,
+.fa-whatsapp {
+    color: #FFFFFF !important;
 }
+
 .breadcrumb a {
     color: #17a3b8 !important;
     text-decoration: none;
@@ -34,7 +50,7 @@ button,
 
 a #modoal-map-link {
     color: #FFFFFF !important;
-    
+
 }
 
 .fw-medium {
@@ -203,7 +219,7 @@ a #modoal-map-link {
 
 /*** Hero Header ***/
 .hero-header {
-    background: linear-gradient(rgba(20, 20, 31, .7), rgba(20, 20, 31, .7)), url(../img/bg-hero.jpg);
+    background: linear-gradient(rgba(20, 20, 31, .7), rgba(20, 20, 31, .7)), url(../img/condaoDefault.png);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -474,4 +490,9 @@ a #modoal-map-link {
     margin-right: 0;
     padding-right: 0;
     border-right: none;
+}
+
+.page-item.active .page-link {
+    background-color: #17a3b8 !important;
+    border-color: #17a3b8 !important;
 }

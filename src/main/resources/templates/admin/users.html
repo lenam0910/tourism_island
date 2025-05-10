@@ -61,7 +61,7 @@
                                             data-bs-target="#editUserModal"
                                             th:attr="data-id=${user.id},data-username=${user.username},data-fullname=${user.fullName},data-email=${user.email},data-role=${user.role}"
                                             onclick="populateEditModal(this)">Edit</button>
-                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" th:if="${user.role != 'ADMIN'}"
                                             data-bs-target="#deleteUserModal"
                                             th:attr="data-id=${user.id},data-username=${user.username}"
                                             onclick="populateDeleteModal(this)">Delete</button>

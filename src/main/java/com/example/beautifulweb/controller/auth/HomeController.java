@@ -2,10 +2,15 @@ package com.example.beautifulweb.controller.auth;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
 import com.example.beautifulweb.model.TourBooking;
@@ -27,14 +32,26 @@ public class HomeController {
     @Value("${gomaps.key}")
     private String gomapsKey;
 
-    public HomeController(UserService userService, TourismService tourismService, ToursimImageService tourismImageService) {
+    public HomeController(UserService userService, TourismService tourismService,
+            ToursimImageService tourismImageService) {
         this.tourismImageService = tourismImageService;
         this.tourismService = tourismService;
         this.userService = userService;
     }
 
     @GetMapping("/home")
-    public String home(Model model, HttpSession session) {
+    public String home(Model model, HttpSession session, @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1; // Default to the first page
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            }
+        } catch (Exception e) {
+            page = 1;
+        }
+        int pageSize = 3; // Number of items per page
+        PageRequest pageable = PageRequest.of(page - 1, pageSize);
+        Page<Tourism> tourismPage = tourismService.findAll(pageable);
         TourBooking tourBooking = new TourBooking();
 
         Long userId = (Long) session.getAttribute("userId");
@@ -46,9 +63,10 @@ public class HomeController {
             }
         }
 
-        List<Tourism> tourisms = tourismService.getAll();
         List<String> destinations = tourismService.getAllDestinations();
-        model.addAttribute("tourisms", tourisms);
+        model.addAttribute("tourisms", tourismPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", tourismPage.getTotalPages());
         model.addAttribute("MAPS_API_KEY", gomapsKey);
         model.addAttribute("tourBooking", tourBooking);
         model.addAttribute("destinations", destinations);

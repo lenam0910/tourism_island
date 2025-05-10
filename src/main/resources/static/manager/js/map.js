@@ -187,3 +187,36 @@ window.onload = () => {
         }
     });
 };
+document.getElementById("locateBtn").addEventListener("click", () => {
+    if (!navigator.geolocation) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Unsupported',
+            text: 'Your browser does not support location services.',
+        });
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lng = position.coords.longitude;
+            const lat = position.coords.latitude;
+
+            map.flyTo({ center: [lng, lat], zoom: 15 });
+
+            new mapboxgl.Marker({ color: "blue" })
+                .setLngLat([lng, lat])
+                .setPopup(new mapboxgl.Popup().setText("You're here"))
+                .addTo(map);
+        },
+        (error) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error retrieving location. Please enable location services on your device.',
+                text: error.message,
+            });
+        }
+    );
+});
+
+

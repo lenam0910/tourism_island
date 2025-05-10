@@ -47,48 +47,12 @@
     <!--update api key in application.properties-->
     <script async defer
         th:src="'https://maps.gomaps.pro/maps/api/js?key=' + ${MAPS_API_KEY} + '&libraries=places&callback=initMap'"></script>
+    <link rel="stylesheet" href="/css/index.css">
     <!-- Mapbox GL JS CSS -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
-
     <!-- Mapbox GL JS -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-    <style>
-        #map {
-            width: 100%;
-            height: 600px;
-            border: 1px solid #ddd;
-            /* Thêm viền để dễ kiểm tra */
-        }
 
-        .preview-image {
-            width: 99px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            margin: 5px;
-        }
-
-        .modal-body {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        #modal-images,
-        #nearby-services {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .service-item {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            width: 100%;
-        }
-    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script
@@ -96,15 +60,6 @@
     <link
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
         rel="stylesheet">
-
-    <script>
-        $(document).ready(function () {
-            $('#datetime').datetimepicker({
-                format: 'MM/DD/YYYY h:mm A', // Định dạng chính xác
-                useCurrent: false
-            });
-        });
-    </script>
 </head>
 
 <body>
@@ -124,7 +79,7 @@
             <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
                     <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>CÔN ĐẢO</small>
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>0933492086</small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>0933 492 086</small>
                     <small class="text-light"><i class="fa fa-envelope-open me-2"></i>tourismislands1@gmail.com
                     </small>
                 </div>
@@ -158,8 +113,8 @@
                 <div class="row justify-content-center py-5">
                     <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
                         <h1 class="display-3 text-white mb-3 animated slideInDown">Enjoy Your Vacation With Us</h1>
-                        <p class="fs-4 text-white mb-4 animated slideInDown">Tempor erat elitr rebum at clita diam amet
-                            diam et eos erat ipsum lorem sit</p>
+                        <p class="fs-4 text-white mb-4 animated slideInDown">Con Dao – Where Every Wave Tells a Story.
+                        </p>
                         <!--feature will be updated later-->
                         <!-- <div class="position-relative w-75 mx-auto animated slideInDown">
                             <input class="form-control border-0 rounded-pill w-100 py-3 ps-4 pe-5" type="text"
@@ -218,7 +173,7 @@
                             <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>24/7 Service</p>
                         </div>
                     </div>
-                    <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a>
+                    <!-- <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a> -->
                 </div>
             </div>
         </div>
@@ -236,31 +191,39 @@
 
             <!-- Modal for Individual Service -->
             <div class="modal fade" id="destinationModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content tourism-modal">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modal-title"></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p id="modal-description"></p>
-                            <div id="modal-images"></div>
-                            <a id="modal-map-link" href="#" target="_blank" class="btn mt-3" style="color: white;">View
-                                on
-                                Google Maps</a>
+                            <p id="modal-description" class="text-muted"></p>
+                            <div id="modal-images" class="image-gallery d-flex flex-wrap gap-2 my-3"></div>
+                            <div class="d-flex flex-column flex-md-row gap-3 mt-2">
+                                <a id="modal-map-link" href="#" target="_blank"
+                                    class="btn btn-info text-white flex-fill">
+                                    🌍 View on Google Maps
+                                </a>
+                                <a id="view-details" href="#" class="btn btn-success text-white flex-fill">
+                                    📖 View Detail
+                                </a>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="modal-footer border-top-0">
+                            <button type="button" class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
             </div>
 
+
             <!-- Modal for Nearby Services -->
             <div class="modal fade" id="nearbyModal" tabindex="-1" aria-labelledby="nearbyModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content">
+                    <div class="modal-content tourism-modal">
                         <div class="modal-header">
                             <h5 class="modal-title" id="nearbyModalLabel">Nearby Services (2km Radius)</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -433,6 +396,28 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <br>
+            <!-- Pagination -->
+            <div th:if="${totalPages > 0}">
+                <nav aria-label="Pagination navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/home(page=${currentPage-1})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                            th:classappend="${currentPage == i} ? 'active'">
+                            <a class="page-link" th:href="@{/home(page=${i})}" th:text="${i}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                            <a class="page-link" th:href="@{/home(page=${currentPage+1})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
@@ -757,199 +742,7 @@
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
     <script th:src="@{/manager/js/main.js}"></script>
-    <script>
-        mapboxgl.accessToken = "[[${MAPS_API_KEY}]]";
-
-        let map;
-        let allMarkers = [];
-        let searchMarker;
-        let searchCircle;
-        const searchRadius = 1000;
-        let destinationModal;
-        let nearbyModal;
-
-        function initMap() {
-            map = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/satellite-v9',
-                center: [106.6018, 8.6955],
-                zoom: 13
-            });
-
-            map.on('load', () => {
-                destinationModal = new bootstrap.Modal(document.getElementById('destinationModal'));
-                nearbyModal = new bootstrap.Modal(document.getElementById('nearbyModal'));
-                loadMarkers();
-
-                map.on('click', (e) => {
-                    const lngLat = e.lngLat;
-                    placeSearchMarker([lngLat.lng, lngLat.lat]);
-                });
-            });
-        }
-
-        function placeSearchMarker(lngLat) {
-            if (searchMarker) searchMarker.remove();
-            if (map.getSource('search-circle')) {
-                map.removeLayer('search-circle-layer');
-                map.removeSource('search-circle');
-            }
-
-            searchMarker = new mapboxgl.Marker({
-                draggable: true,
-                color: '#FF0000'
-            })
-                .setLngLat(lngLat)
-                .addTo(map);
-
-            drawSearchCircle(lngLat);
-
-            searchMarker.on('dragend', () => {
-                const newPos = searchMarker.getLngLat();
-                drawSearchCircle([newPos.lng, newPos.lat]);
-                fetchNearbyServices(newPos.lat, newPos.lng, searchRadius);
-            });
-
-            fetchNearbyServices(lngLat[1], lngLat[0], searchRadius);
-        }
-
-        function drawSearchCircle([lng, lat]) {
-            const circleData = createGeoJSONCircle([lng, lat], searchRadius);
-
-            map.addSource('search-circle', {
-                type: 'geojson',
-                data: circleData
-            });
-
-            map.addLayer({
-                id: 'search-circle-layer',
-                type: 'fill',
-                source: 'search-circle',
-                paint: {
-                    'fill-color': '#1a73e8',
-                    'fill-opacity': 0.2
-                }
-            });
-        }
-
-        function createGeoJSONCircle(center, radiusInMeters, points = 64) {
-            const coords = { latitude: center[1], longitude: center[0] };
-            const km = radiusInMeters / 1000;
-            const ret = [];
-            const distanceX = km / (111.320 * Math.cos(coords.latitude * Math.PI / 180));
-            const distanceY = km / 110.574;
-
-            for (let i = 0; i < points; i++) {
-                const theta = (i / points) * (2 * Math.PI);
-                const x = distanceX * Math.cos(theta);
-                const y = distanceY * Math.sin(theta);
-                ret.push([coords.longitude + x, coords.latitude + y]);
-            }
-            ret.push(ret[0]);
-            return {
-                type: 'Feature',
-                geometry: {
-                    type: 'Polygon',
-                    coordinates: [ret]
-                }
-            };
-        }
-
-        function loadMarkers() {
-            allMarkers.forEach(m => m.remove());
-            allMarkers = [];
-
-            fetch("/api/tourism/all")
-                .then(res => res.json())
-                .then(data => {
-                    data.forEach(service => {
-                        if (!service.latitude || !service.longitude || !service.name) return;
-
-                        const marker = new mapboxgl.Marker()
-                            .setLngLat([service.longitude, service.latitude])
-                            .addTo(map);
-
-                        // Thêm sự kiện nhấp chuột cho marker
-                        marker.getElement().addEventListener('click', (e) => {
-                            // Ngăn sự kiện lan tỏa đến bản đồ
-                            e.stopPropagation();
-
-                            // Hiển thị modal chi tiết
-                            document.getElementById("modal-title").innerText = service.name;
-                            document.getElementById("modal-description").innerText = service.description || 'No description available';
-                            document.getElementById("modal-map-link").href = `https://www.google.com/maps?q=${service.latitude},${service.longitude}`;
-
-                            const imageContainer = document.getElementById("modal-images");
-                            imageContainer.innerHTML = 'Loading images...';
-
-                            fetch(`/api/tourism/images/${service.id}`)
-                                .then(res => res.json())
-                                .then(images => {
-                                    imageContainer.innerHTML = '';
-                                    if (images.length > 0) {
-                                        images.forEach(img => {
-                                            const imgElement = document.createElement('img');
-                                            imgElement.src = img.imagePath;
-                                            imgElement.className = 'preview-image';
-                                            imageContainer.appendChild(imgElement);
-                                        });
-                                    } else {
-                                        imageContainer.innerText = 'No images available';
-                                    }
-                                }).catch(() => {
-                                    imageContainer.innerText = 'Error loading images';
-                                });
-
-                            destinationModal.show();
-                        });
-
-                        allMarkers.push(marker);
-                    });
-                });
-        }
-
-        // Sự kiện nhấp chuột vào bản đồ
-        map.on('click', (e) => {
-            const lngLat = e.lngLat;
-            placeSearchMarker([lngLat.lng, lngLat.lat]);
-        });
-
-        function fetchNearbyServices(lat, lng, radius) {
-            const container = document.getElementById("nearby-services");
-            if (!container) return;
-            container.innerHTML = 'Loading nearby services...';
-
-            fetch(`/api/tourism/nearby?lat=${lat}&lng=${lng}&radius=${radius}`)
-                .then(res => res.json())
-                .then(services => {
-                    container.innerHTML = '';
-                    if (services && services.length > 0) {
-                        services.forEach(service => {
-                            const serviceDiv = document.createElement('div');
-                            serviceDiv.className = 'service-item';
-                            serviceDiv.innerHTML = `
-                            <h6>${service.name || 'Unknown'}</h6>
-                            <p>${service.description || 'No description'}</p>
-                            <a href="https://www.google.com/maps?q=${service.latitude},${service.longitude}" target="_blank" class="btn btn-outline-primary btn-sm">View on Google Maps</a>
-                        `;
-                            container.appendChild(serviceDiv);
-                        });
-                    } else {
-                        container.innerText = 'No services found within 1km radius.';
-                    }
-                    nearbyModal.show();
-                })
-                .catch(() => {
-                    container.innerHTML = 'Error loading nearby services';
-                    nearbyModal.show();
-                });
-        }
-
-        window.addEventListener('load', () => {
-            initMap();
-        });
-    </script>
-
+    <script th:src="@{/js/index.js}"></script>
 </body>
 
 </html>
