@@ -30,8 +30,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"
         integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Google reCAPTCHA -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
@@ -51,29 +49,24 @@
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                     <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <h3>Đăng ký tài khoản</h3>
+                            <h3>Sign Up</h3>
                         </div>
-                        <!-- Hiển thị thông báo lỗi nếu tên đăng nhập đã tồn tại -->
+                        <!-- Display error message if username already exists -->
                         <div th:if="${param.existed}" class="alert alert-danger" role="alert">
-                            Tên đăng nhập đã được sử dụng
-                        </div>
-                        <!-- Hiển thị thông báo lỗi reCAPTCHA -->
-                        <div th:if="${recaptchaError}" class="alert alert-danger" role="alert"
-                            th:text="${recaptchaError}">
-                            Please complete the reCAPTCHA verification.
+                            Username is already taken
                         </div>
                         <form th:action="@{/signup}" th:object="${user}" method="post">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" th:field="*{fullName}" id="floatingFullName"
-                                    placeholder="Họ và tên">
-                                <label for="floatingFullName">Họ và tên</label>
+                                    placeholder="Full Name">
+                                <label for="floatingFullName">Full Name</label>
                                 <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"
                                     style="color: red;"></div>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" th:field="*{username}" id="floatingUsername"
-                                    placeholder="Tên đăng nhập">
-                                <label for="floatingUsername">Tên đăng nhập</label>
+                                    placeholder="Username">
+                                <label for="floatingUsername">Username</label>
                                 <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
                                     style="color: red;"></div>
                             </div>
@@ -86,18 +79,14 @@
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" th:field="*{password}" id="floatingPassword"
-                                    placeholder="Mật khẩu">
-                                <label for="floatingPassword">Mật khẩu</label>
+                                    placeholder="Password">
+                                <label for="floatingPassword">Password</label>
                                 <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
                                     style="color: red;"></div>
                             </div>
-                            <div class="g-recaptcha mb-3" th:attr="data-sitekey=${recaptchaSiteKey}"
-                                data-callback="onRecaptchaSuccess"></div>
-                            <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
-                            <button type="submit" id="signupButton" class="btn btn-primary py-3 w-100 mb-4"
-                                disabled>Đăng ký</button>
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
                         </form>
-                        <p class="text-center mb-0">Đã có tài khoản? <a href="/login">Đăng nhập</a></p>
+                        <p class="text-center mb-0">Already have an account? <a href="/login">Log In</a></p>
                     </div>
                 </div>
             </div>
@@ -114,15 +103,6 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Template Javascript -->
     <script th:src="@{/manager/js/main.js}"></script>
-
-    <!-- JavaScript to enable/disable signup button based on reCAPTCHA -->
-    <script>
-        function onRecaptchaSuccess() {
-            document.getElementById("signupButton").disabled = false;
-            var response = grecaptcha.getResponse();
-            document.getElementById("recaptchaResponse").value = response;
-        }
-    </script>
 </body>
 
 </html>
