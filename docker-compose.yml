@@ -8,6 +8,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=tourism_user
       - SPRING_DATASOURCE_PASSWORD=tourism_pass
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_LOG_LEVEL=DEBUG
       - RECAPTCHA_SITE_KEY=${RECAPTCHA_SITE_KEY}
       - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
     depends_on:
@@ -32,7 +33,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 30s
+      start_period: 60s
     networks:
       - app-network
 
