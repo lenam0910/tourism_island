@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tourist - Travel Agency HTML Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/tour-user-detail.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Topbar Start -->
+    <div th:replace="~{layout/topbar-user :: topbar-user}"></div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar & Hero Start -->
+    <div class="container-fluid position-relative p-0">
+        <div th:replace="~{layout/navbar-user :: navbar-user}"></div>
+
+        <div class="container-fluid bg-primary py-5 mb-5 hero-header">
+            <div class="container py-5">
+                <div class="row justify-content-center py-5">
+                    <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
+                        <h1 class="display-3 text-white animated slideInDown">Packages</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb justify-content-center">
+                                <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                                <li class="breadcrumb-item text-white active" aria-current="page">Tourism Detail</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar & Hero End -->
+
+
+    <!-- Package Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Packages</h6>
+                <h1 class="mb-5">Awesome Packages</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="hero-section">
+                    <div class="content-box">
+                        <h2><span>The Elephant Mountain</span></h2>
+                        <button class="explore-button">Explore The Elephant Mountain</button>
+                        <p><em>The Elephant Mountain</em> is one of the most captivating destinations in Con Dao. With
+                            an elevation
+                            of approximately 260 meters, its peak offers a perfect vantage point to admire the panoramic
+                            view of Con
+                            Dao from above, immerse yourself in the serene atmosphere, and enjoy the fresh air. Along
+                            the trekking
+                            route, visitors have the opportunity to explore the diverse tropical rainforest ecosystem
+                            and encounter
+                            various species of wildlife.</p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container-package">
+                <div class="schedule-box">
+                    <div class="schedule-item">
+                        <strong>8:00 AM – Departure</strong><br />
+                        Picks up guests at the hotel and begins the journey.
+                    </div>
+                    <div class="schedule-item">
+                        <strong>9:00 AM – Explore</strong><br />
+                        50-minute hike through tranquil low forests. Listen to birds, breathe fresh air, and enjoy
+                        tropical
+                        fruits.
+                    </div>
+                    <div class="schedule-item">
+                        <strong>10:30 AM – Return</strong><br />
+                        Guests descend the mountain and return.
+                    </div>
+                    <div class="schedule-item">
+                        <strong>11:30 AM – End</strong><br />
+                        Vehicle picks guests up and drops off at the hotel.
+                    </div>
+                </div>
+
+                <div class="includes-box">
+                    <div class="overlay">
+                        <div class="package-title">Package Includes</div>
+                        <ul class="includes-list">
+                            <li>Xe đón và trả khách tại khách sạn / Hotel pick-up and drop-off</li>
+                            <li>Hướng dẫn viên / English-speaking tour guide</li>
+                            <li>Vé tham quan Vườn Quốc gia / National Park entrance ticket</li>
+                            <li>Nước uống, trái cây, bữa ăn nhẹ / Water, fruits, light meal</li>
+                            <li>Hộp sơ cứu y tế / First aid kit</li>
+                            <li>Phí bảo hiểm du lịch, phí dịch vụ / Insurance, service charge</li>
+                        </ul>
+                    </div>
+                    <div class="price-tag">
+                        550.000 VND / pax
+                        <small>Liên hệ để đặt chỗ và tư vấn chi tiết</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Package End -->
+
+
+    <!-- Booking Start -->
+    <!-- Booking Start -->
+
+
+
+
+    <!-- Footer Start -->
+    <div th:replace="~{layout/footer-user :: footer-user}"></div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

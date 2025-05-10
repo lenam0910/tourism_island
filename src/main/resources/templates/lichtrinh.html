@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lịch trình Núi Con Voi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px;
+            background-color: #f5fafa;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .schedule-box {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border: 2px solid #cde4df;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .schedule-box h3 {
+            margin-bottom: 20px;
+        }
+
+        .schedule-item {
+            margin-bottom: 18px;
+        }
+
+        .schedule-item strong {
+            display: inline-block;
+            width: 100px;
+            color: #008080;
+        }
+
+        .includes-box {
+            flex: 1;
+            background: url('/uploads/images/tourism/1746786078587-Screenshot\ \(12\).png') no-repeat center center;
+            background-size: cover;
+            border-radius: 20px;
+            position: relative;
+            min-height: 600px;
+            overflow: hidden;
+        }
+
+        .overlay {
+            background-color: rgba(47, 31, 31, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            left: 30px;
+        }
+
+        .package-title {
+            background-color: #8b4d29;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .includes-list {
+            color: white;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .includes-list li {
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .includes-list li::before {
+            content: "✔";
+            color: #2e8b57;
+            margin-right: 8px;
+        }
+
+        .price-tag {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background-color: #007575;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .price-tag small {
+            display: block;
+            font-size: 13px;
+            font-weight: normal;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="schedule-box">
+            <div class="schedule-item">
+                <strong>8:00 AM – Departure</strong><br />
+                Picks up guests at the hotel and begins the journey.
+            </div>
+            <div class="schedule-item">
+                <strong>9:00 AM – Explore</strong><br />
+                50-minute hike through tranquil low forests. Listen to birds, breathe fresh air, and enjoy tropical
+                fruits.
+            </div>
+            <div class="schedule-item">
+                <strong>10:30 AM – Return</strong><br />
+                Guests descend the mountain and return.
+            </div>
+            <div class="schedule-item">
+                <strong>11:30 AM – End</strong><br />
+                Vehicle picks guests up and drops off at the hotel.
+            </div>
+        </div>
+
+        <div class="includes-box">
+            <div class="overlay">
+                <div class="package-title">Bao Gồm / Package Includes</div>
+                <ul class="includes-list">
+                    <li>Xe đón và trả khách tại khách sạn / Hotel pick-up and drop-off</li>
+                    <li>Hướng dẫn viên / English-speaking tour guide</li>
+                    <li>Vé tham quan Vườn Quốc gia / National Park entrance ticket</li>
+                    <li>Nước uống, trái cây, bữa ăn nhẹ / Water, fruits, light meal</li>
+                    <li>Hộp sơ cứu y tế / First aid kit</li>
+                    <li>Phí bảo hiểm du lịch, phí dịch vụ / Insurance, service charge</li>
+                </ul>
+            </div>
+            <div class="price-tag">
+                550.000 VND / pax
+                <small>Liên hệ để đặt chỗ và tư vấn chi tiết</small>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

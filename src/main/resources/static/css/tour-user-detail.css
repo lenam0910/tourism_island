@@ -1,0 +1,176 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body,
+html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.hero-section {
+    position: relative;
+    height: 100vh;
+    background-image: url('/uploads/images/tourism/1746786078587-Screenshot\ \(12\).png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 40px;
+}
+
+.content-box {
+    background-color: rgba(30, 30, 30, 0.8);
+    /* nền tối mờ cho chữ dễ đọc */
+    color: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    max-width: 800px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.content-box h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.content-box h2 span {
+    font-family: 'Pacifico', cursive;
+    font-size: 40px;
+    color: white;
+}
+
+.explore-button {
+    background-color: #a2481c;
+    color: white;
+    padding: 10px 20px;
+    margin: 15px 0;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.content-box p {
+    margin-top: 10px;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.content-box em {
+    font-style: italic;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 40px;
+    background-color: #f5fafa;
+}
+
+.container-package {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.schedule-box {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    border: 2px solid #cde4df;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.schedule-box h3 {
+    margin-bottom: 20px;
+}
+
+.schedule-item {
+    margin-bottom: 18px;
+}
+
+.schedule-item strong {
+    display: inline-block;
+    width: 100px;
+    color: #008080;
+}
+
+.includes-box {
+    flex: 1;
+    background: url('/uploads/images/tourism/1746786078587-Screenshot\ \(12\).png') no-repeat center center;
+    background-size: cover;
+    border-radius: 20px;
+    position: relative;
+    min-height: 600px;
+    overflow: hidden;
+}
+
+.overlay {
+    background-color: rgba(47, 31, 31, 0.9);
+    padding: 30px;
+    border-radius: 20px;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    left: 30px;
+}
+
+.package-title {
+    background-color: #8b4d29;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.includes-list {
+    color: white;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.includes-list li {
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.includes-list li::before {
+    content: "✔";
+    color: #2e8b57;
+    margin-right: 8px;
+}
+
+.price-tag {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background-color: #007575;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+.price-tag small {
+    display: block;
+    font-size: 13px;
+    font-weight: normal;
+    margin-top: 5px;
+}
