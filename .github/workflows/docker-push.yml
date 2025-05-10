@@ -12,11 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Debug secrets
-        run: |
-          echo "Username: ${{ secrets.DOCKERHUB_USERNAME }}"
-          echo "Token: [REDACTED]"
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
