@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   app:
     image: tourismisland:latest
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3308/tourismisland?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/tourism?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=tourism_user
       - SPRING_DATASOURCE_PASSWORD=tourism_pass
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -22,7 +20,7 @@ services:
     image: mysql:8.0
     environment:
       - MYSQL_ROOT_PASSWORD=root_pass
-      - MYSQL_DATABASE=tourismisland
+      - MYSQL_DATABASE=tourism
       - MYSQL_USER=tourism_user
       - MYSQL_PASSWORD=tourism_pass
     volumes:
