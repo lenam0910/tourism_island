@@ -80,7 +80,7 @@ public class ForgotPasswordController {
         model.addAttribute("hashedCode", hashedCode);
         return "reset-password";
     }
-    
+
     @GetMapping("/reset-password")
     public String showResetPasswordForm(@RequestParam("userId") Long userId,
             @RequestParam("hashedCode") String hashedCode, Model model) {
