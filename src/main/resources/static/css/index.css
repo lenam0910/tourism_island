@@ -124,7 +124,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2000; /* ✅ Đảm bảo cao hơn modal Bootstrap (z-index mặc định: 1050) */
+    z-index: 2000;
+    /* ✅ Đảm bảo cao hơn modal Bootstrap (z-index mặc định: 1050) */
 }
 
 .image-lightbox-overlay img {
@@ -147,4 +148,67 @@
         opacity: 1;
         transform: scale(1);
     }
+}
+
+/*css for booking modal*/
+#bookingModal .modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    background: #fefefe;
+    padding: 1.5rem;
+}
+
+#bookingModal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+#bookingModal .modal-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2e8b57;
+    /* xanh lá du lịch */
+}
+
+#bookingModal .form-floating>.form-control,
+#bookingModal .form-floating>.form-select {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    background-color: #f8f9fa;
+    padding-left: 1rem;
+}
+
+#bookingModal .form-floating>.form-control:focus,
+#bookingModal .form-floating>.form-select:focus {
+    border-color: #2e8b57;
+    box-shadow: 0 0 0 0.2rem rgba(46, 139, 87, 0.25);
+}
+
+#bookingModal .btn-primary {
+    background-color: #2e8b57;
+    border: none;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+#bookingModal .btn-primary:hover {
+    background-color: #24724b;
+}
+
+#bookingModal .btn-secondary {
+    border-radius: 8px;
+}
+
+#bookingModal .modal-footer {
+    border-top: none;
+    padding-top: 0;
+}
+
+#bookingModal .error-message,
+#bookingModal .form-floating>div[th\:if] {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 4px;
 }
