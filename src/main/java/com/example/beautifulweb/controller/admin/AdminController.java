@@ -65,7 +65,7 @@ public class AdminController {
     @GetMapping("/tourism-manage")
     public String showTourismManage(Model model, @RequestParam(defaultValue = "0") int page) {
 
-        int pageSize = 10;
+        int pageSize = 3;
         // Giảm page đi 1 vì PageRequest sử dụng index từ 0
         PageRequest pageable = PageRequest.of(page, pageSize);
         Page<Tourism> userPage = tourismService.findAll(pageable);
