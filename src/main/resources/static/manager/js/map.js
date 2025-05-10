@@ -71,6 +71,7 @@ function loadMarkers() {
                     document.getElementById("sidebar-description").innerText = service.description;
                     document.getElementById("sidebar-map-link").href = `https://www.google.com/maps?q=${service.latitude},${service.longitude}`;
                     document.getElementById("sidebar-view-detail").href = `/admin/tourism-manage/view/${service.id}`;
+                    document.getElementById("sidebar-edit").href = `/admin/tourism-manage/edit/${service.id}`;
 
                     document.getElementById("deleteButton").onclick = function () {
                         deleteTourism(service.id);
