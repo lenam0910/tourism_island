@@ -200,7 +200,8 @@ function fetchNearbyServices(lat, lng, radius) {
             container.innerHTML = 'Error loading nearby services';
             nearbyModal.show();
         });
-}
+};
+
 
 window.addEventListener('load', () => {
     initMap();

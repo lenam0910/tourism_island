@@ -389,8 +389,9 @@
                                 <a th:href="@{/tourism-details/{tourismId}(tourismId=${tourism.id})}"
                                     class="btn btn-sm btn-primary px-3 border-end"
                                     style="border-radius: 30px 0 0 30px;">Read More</a>
-                                <a href="#" class="btn btn-sm btn-primary px-3"
-                                    style="border-radius: 0 30px 30px 0;">Book
+                                <a href="#" class="btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;"
+                                    data-bs-toggle="modal" data-bs-target="#bookingModal"
+                                    th:attr="data-destination=${tourism.name}">Book
                                     Now</a>
                             </div>
                         </div>
@@ -452,7 +453,105 @@
         });
     </script>
     <!-- Package End -->
+    <!-- Booking Modal -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const bookingModal = document.getElementById('bookingModal');
 
+            bookingModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const destination = button.getAttribute('data-destination');
+
+                if (destination) {
+                    const select = bookingModal.querySelector('#destination');
+                    if (select) {
+                        // Tìm và chọn option khớp với tên
+                        const optionToSelect = Array.from(select.options).find(opt => opt.value === destination);
+                        if (optionToSelect) {
+                            optionToSelect.selected = true;
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalLabel">Book A Tour</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/book-tour}" th:object="${tourBooking}" method="post" id="bookTourForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control bg-transparent" id="name" th:field="*{name}"
+                                        placeholder="Your Name" required>
+                                    <label for="name">Your Name</label>
+                                    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control bg-transparent" id="email"
+                                        th:field="*{email}" placeholder="Your Email" required>
+                                    <label for="email">Your Email</label>
+                                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating date" id="date3" data-target-input="nearest">
+                                    <input type="text" class="form-control bg-transparent datetimepicker-input"
+                                        id="datetime" th:field="*{datetime}" placeholder="Date & Time"
+                                        data-target="#date3" data-toggle="datetimepicker" required>
+                                    <label for="datetime">Date & Time</label>
+                                    <div th:if="${#fields.hasErrors('datetime')}" th:errors="*{datetime}"
+                                        style="color: red;"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select class="form-select bg-transparent" id="destination"
+                                        th:field="*{destination}" required>
+                                        <option value="" disabled>Chọn điểm đến</option>
+                                        <option th:each="dest : ${destinations}" th:value="${dest}" th:text="${dest}"
+                                            th:selected="${dest == tourBooking.destination}"></option>
+                                    </select>
+                                    <label for="destination">Destination</label>
+                                    <div th:if="${#fields.hasErrors('destination')}" th:errors="*{destination}"
+                                        class="error-message"></div>
+                                </div>
+                            </div>
+                            <div th:if="${destinations == null or destinations.isEmpty()}">
+                                <p style="color: red;">Không có điểm đến nào khả dụng.</p>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea class="form-control bg-transparent" placeholder="Special Request"
+                                        id="specialRequest" th:field="*{specialRequest}"
+                                        style="height: 100px"></textarea>
+                                    <label for="specialRequest">Special Request</label>
+                                    <div th:if="${#fields.hasErrors('specialRequest')}" th:errors="*{specialRequest}"
+                                        style="color: red;"></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary w-100 py-3" type="submit">Book Now</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Booking Start -->
     <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
