@@ -9,8 +9,6 @@ services:
       - db-data:/var/lib/mysql
     ports:
       - "3306:3306"
-    networks:
-      - tourism-network
     expose:
       - "3306"
     restart: always
@@ -27,14 +25,6 @@ services:
     volumes:
       - /home/ubuntu/uploads:/home/ubuntu/uploads
     depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - tourism-network
-
-networks:
-  tourism-network:
-    driver: bridge
-
+      - db
 volumes:
   db-data:
