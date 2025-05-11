@@ -1,5 +1,5 @@
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiZHV5aHZoZTE4MDA1MCIsImEiOiJjbWFndGtvN2owNHFoMnFvZjhiYXJhZGQ1In0.hUgne7zIXBviCIb5yzDEuw'; // Thay bằng token Mapbox thật của bạn
+mapboxgl.accessToken = 'pk.eyJ1IjoiaGFpemFnZyIsImEiOiJjbWFqYXZybjgwdnE1MmtvcGd1NTZ2MXV5In0.P0SyaKDXdSqh_jg2CGpVcA'; // Thay bằng token Mapbox thật của bạn
 let map;
 let allMarkers = [];
 let latClicked = 0, lngClicked = 0;
