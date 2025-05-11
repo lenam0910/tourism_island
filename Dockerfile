@@ -1,28 +1,27 @@
-# Sử dụng image OpenJDK 17 làm base
+#**Stage 1: Build the JAR using Maven**
+FROM maven:3.8.4-openjdk-17 AS builder
+
+# Set working directory
+WORKDIR /build
+
+# Copy project files
+COPY pom.xml .
+COPY src ./src
+
+# Build the application (without running tests)
+RUN mvn clean package -DskipTests
+
+#**Stage 2: Create lightweight runtime image**
 FROM openjdk:17-jdk-slim
 
-# Đặt thư mục làm việc trong container
+# Set working directory
 WORKDIR /app
 
-# Sao chép file Maven wrapper và file cấu hình Maven
-COPY mvnw .
-COPY .mvn .mvn
+# Copy the JAR from the build stage
+COPY --from=builder /build/target/*.jar app.jar
 
-# Cấp quyền thực thi cho mvnw
-RUN chmod +x mvnw
-
-# Sao chép file pom.xml và tải các phụ thuộc
-COPY pom.xml .
-RUN ./mvnw dependency:go-offline
-
-# Sao chép mã nguồn của dự án
-COPY src src
-
-# Build ứng dụng Spring Boot
-RUN ./mvnw package -DskipTests
-
-# Expose port mà ứng dụng Spring Boot sử dụng (mặc định 8080)
+# Expose application port
 EXPOSE 8080
 
-# Lệnh chạy ứng dụng Spring Boot
-CMD ["java", "-jar", "target/beautifulweb-0.0.1-SNAPSHOT.jar"]
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar","--spring.profiles.active=docker"]

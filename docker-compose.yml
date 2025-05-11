@@ -1,25 +1,4 @@
-version: "3.8"
-
 services:
-  app:
-    image: lenam0910/tourismisland:latest
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/tourism?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=123456
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_LOG_LEVEL=DEBUG
-      - RECAPTCHA_SITE_KEY=${RECAPTCHA_SITE_KEY}
-      - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
-    volumes:
-      - /home/ubuntu/uploads:/home/ubuntu/uploads
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - tourism-network
 
   db:
     image: mysql:8.0
@@ -38,6 +17,27 @@ services:
       start_period: 60s
     networks:
       - tourism-network
+    expose:
+      - "3306"
+    restart: always
+
+  app:
+    image: lenam0910/tourismisland:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/tourism
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=123456
+    volumes:
+      - /home/ubuntu/uploads:/home/ubuntu/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - tourism-network
+
 
 networks:
   tourism-network:
