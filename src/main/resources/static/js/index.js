@@ -164,12 +164,6 @@ function loadMarkers() {
         });
 };
 
-// Sự kiện nhấp chuột vào bản đồ
-map.on('click', (e) => {
-    const lngLat = e.lngLat;
-    placeSearchMarker([lngLat.lng, lngLat.lat]);
-});
-
 function fetchNearbyServices(lat, lng, radius) {
     const container = document.getElementById("nearby-services");
     if (!container) return;
