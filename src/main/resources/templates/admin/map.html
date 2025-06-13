@@ -56,7 +56,10 @@
 
         <!-- Content Start -->
         <div class="content">
-            <div id="map" style="positive: relative;">
+            <!-- Navbar Start -->
+            <div th:replace="~{layout/navbar-admin :: navbar-admin}"></div>
+            <!-- Navbar End -->
+            <div id="map" style="position: relative;">
                 <button id="locateBtn" title="Vị trí của tôi">
                     <i class="fas fa-crosshairs"></i>
                 </button>

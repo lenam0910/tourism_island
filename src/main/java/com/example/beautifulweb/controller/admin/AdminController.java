@@ -144,5 +144,5 @@ public class AdminController {
             Model model) {
         userService.deleteUser(id);
         return "redirect:/admin/users?delete-user-success";
-    }
+    }    
 }

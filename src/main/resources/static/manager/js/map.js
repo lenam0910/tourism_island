@@ -146,6 +146,7 @@ function deleteTourism(id) {
                     Swal.fire('Deleted!', 'The tourism item has been deleted.', 'success');
                     sidebar.hide();
                     loadMarkers();
+                    window.location.reload();
                 },
                 error: function () {
                     Swal.fire('Error!', 'Failed to delete tourism.', 'error');

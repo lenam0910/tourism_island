@@ -42,7 +42,10 @@ public class navigationController {
     public String about() {
         return "about"; // Returns the about.html template
     }
-
+    @GetMapping("/flight-search")
+    public String test() {
+        return "flight-search"; // Returns the flight-search.html template
+    }
     @GetMapping("/services")
     public String services() {
         return "service"; // Returns the services.html template
